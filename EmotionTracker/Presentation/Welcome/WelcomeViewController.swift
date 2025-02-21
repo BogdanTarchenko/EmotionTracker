@@ -82,6 +82,6 @@ private extension WelcomeViewController {
         static let appleIDButtonTitle: String = LocalizedKey.Welcome.appleIDButtonTitle
         static let welcomeTitle: String = LocalizedKey.Welcome.welcomeTitle
         static let titleTextColor: UIColor = UIColor.textSecondary
-        static let titleFont = UIFont.systemFont(ofSize: 48, weight: .bold)
+        static let titleFont = UIFont(name: "Gwen-Trial-Black", size: 48)
     }
 }

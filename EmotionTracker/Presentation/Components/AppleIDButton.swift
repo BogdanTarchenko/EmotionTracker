@@ -80,5 +80,5 @@ private struct Constants {
     static let appleLogoImageName = "AppleLogo"
     static let buttonBackgroundColor = UIColor.buttonPrimary
     static let titleTextColor = UIColor.textSecondary
-    static let titleFont = UIFont.systemFont(ofSize: 16, weight: .regular)
+    static let titleFont = UIFont(name: "VelaSans-Medium", size: 16)
 }
