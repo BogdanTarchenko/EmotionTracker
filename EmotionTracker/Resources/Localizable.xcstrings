@@ -1,0 +1,28 @@
+{
+  "sourceLanguage" : "en",
+  "strings" : {
+    "apple_id_button_title" : {
+      "comment" : "Apple ID button title",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Войти через Apple ID"
+          }
+        }
+      }
+    },
+    "welcome_title" : {
+      "comment" : "Welcome screen title",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Добро пожаловать"
+          }
+        }
+      }
+    }
+  },
+  "version" : "1.0"
+}

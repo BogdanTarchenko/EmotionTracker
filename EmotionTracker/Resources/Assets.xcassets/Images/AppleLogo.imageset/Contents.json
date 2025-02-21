@@ -1,0 +1,12 @@
+{
+  "images" : [
+    {
+      "filename" : "AppleLogo.pdf",
+      "idiom" : "universal"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}

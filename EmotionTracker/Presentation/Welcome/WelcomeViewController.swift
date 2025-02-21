@@ -6,10 +6,17 @@
 //
 
 import UIKit
+import SnapKit
 
 class WelcomeViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
+        setupUI()
+    }
+}
+
+private extension WelcomeViewController {
+    func setupUI() {
         view.backgroundColor = .white
         
         let animatedBackground = AnimatedGradientView(
@@ -19,8 +26,19 @@ class WelcomeViewController: UIViewController {
         )
         
         view.addSubview(animatedBackground)
+        
+        let appleIDButton = AppleIDButton(title: Constants.appleIDButtonTitle)
+        
+        view.addSubview(appleIDButton)
+        
+        appleIDButton.snp.makeConstraints { make in
+            make.horizontalEdges.equalToSuperview().inset(Metrics.appleIDButtonHorizontalEdgesInset)
+            make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).inset(Metrics.appleIDButtonBottomInset)
+        }
     }
 }
+
+// MARK: - Metrics & Constants
 
 private extension WelcomeViewController {
     enum Metrics {
@@ -37,5 +55,12 @@ private extension WelcomeViewController {
             (1.5, 1.5, 1400),
             (-0.5, 1.5, 1400)
         ]
+        
+        static let appleIDButtonHorizontalEdgesInset: CGFloat = 24
+        static let appleIDButtonBottomInset: CGFloat = 24
+    }
+    
+    enum Constants {
+        static let appleIDButtonTitle: String = LocalizedKey.Welcome.appleIDButtonTitle
     }
 }
