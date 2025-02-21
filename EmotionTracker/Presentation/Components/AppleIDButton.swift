@@ -5,7 +5,6 @@
 //  Created by Богдан Тарченко on 21.02.2025.
 //
 
-
 import UIKit
 import SnapKit
 
@@ -25,6 +24,8 @@ class AppleIDButton: UIView {
         return label
     }()
     
+    var onTap: (() -> Void)?
+    
     init(title: String) {
         super.init(frame: .zero)
         
@@ -38,6 +39,10 @@ class AppleIDButton: UIView {
         addSubview(titleLabel)
         
         setupConstraints()
+        
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTap))
+        self.addGestureRecognizer(tapGesture)
+        self.isUserInteractionEnabled = true
     }
     
     required init?(coder: NSCoder) {
@@ -61,6 +66,18 @@ class AppleIDButton: UIView {
             make.trailing.equalToSuperview().inset(Metrics.titleTrailingInset)
             make.centerY.equalToSuperview()
         }
+    }
+    
+    @objc private func handleTap() {
+        UIView.animate(withDuration: 0.1, animations: {
+            self.alpha = 0.7
+        }, completion: { _ in
+            UIView.animate(withDuration: 0.1) {
+                self.alpha = 1.0
+            }
+        })
+        
+        onTap?()
     }
 }
 

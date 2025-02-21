@@ -29,6 +29,10 @@ private extension WelcomeViewController {
         
         let appleIDButton = AppleIDButton(title: Constants.appleIDButtonTitle)
         
+        appleIDButton.onTap = {
+            self.handleAppleIDButtonTapped()
+        }
+        
         view.addSubview(appleIDButton)
         
         appleIDButton.snp.makeConstraints { make in
@@ -51,6 +55,10 @@ private extension WelcomeViewController {
             make.horizontalEdges.equalToSuperview().inset(Metrics.horizontalEdgesInset)
             make.top.equalTo(view.safeAreaLayoutGuide.snp.top).inset(Metrics.welcomeTitleLabelTopInset)
         }
+    }
+    
+    @objc func handleAppleIDButtonTapped() {
+        print("Apple ID button tapped")
     }
 }
 
