@@ -8,7 +8,9 @@
 import UIKit
 import SnapKit
 
-class WelcomeViewController: UIViewController {
+final class WelcomeViewController: UIViewController {
+    weak var coordinator: WelcomeCoordinator?
+
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
@@ -58,7 +60,7 @@ private extension WelcomeViewController {
     }
     
     @objc func handleAppleIDButtonTapped() {
-        print("Apple ID button tapped")
+        coordinator?.handleAppleIDAuthentication()
     }
 }
 
