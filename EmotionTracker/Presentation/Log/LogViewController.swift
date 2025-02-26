@@ -56,9 +56,11 @@ final class LogViewController: UIViewController {
     }
 }
 
+// MARK: - Setup UI & Constraints
+
 private extension LogViewController {
     func setupUI() {
-        view.backgroundColor = .background
+        view.backgroundColor = Constants.backgroundColor
         
         configureNavigationBar()
         configureScrollView()
@@ -163,5 +165,6 @@ private extension LogViewController {
         static let logTitleLabelText: String = LocalizedKey.Log.logTitle
         static let logTitleLabelTextColor: UIColor = .textPrimary
         static let logTitleLabelFont: UIFont = UIFont(name: "Gwen-Trial-Regular", size: 36)!
+        static let backgroundColor: UIColor = .background
     }
 }

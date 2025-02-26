@@ -1,6 +1,39 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
+    "addAlert_text" : {
+      "comment" : "Add alert text",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Добавить напоминание"
+          }
+        }
+      }
+    },
+    "addNoteButton_title" : {
+      "comment" : "AddNoteButton title",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Добавить запись"
+          }
+        }
+      }
+    },
+    "alert_title" : {
+      "comment" : "Alert settings switcher title",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Присылать напоминания"
+          }
+        }
+      }
+    },
     "apple_id_button_title" : {
       "comment" : "Apple ID button title",
       "localizations" : {
@@ -12,6 +45,61 @@
         }
       }
     },
+    "dailyGoalLabel_text" : {
+      "comment" : "Daily goal label text",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "в день:"
+          }
+        }
+      }
+    },
+    "defaultProfileFullNameLabel_text" : {
+      "comment" : "Default profile full name label text",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Иван Иванов"
+          }
+        }
+      }
+    },
+    "feelingLabel_text" : {
+      "comment" : "Feeling label text",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Я чувствую"
+          }
+        }
+      }
+    },
+    "fewDays" : {
+      "comment" : "Few days pluralize",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "дня"
+          }
+        }
+      }
+    },
+    "fewNotes" : {
+      "comment" : "Few notes pluralize",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "записи"
+          }
+        }
+      }
+    },
     "log_title" : {
       "comment" : "Log screen title",
       "localizations" : {
@@ -19,6 +107,116 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Что вы сейчас чувствуете?"
+          }
+        }
+      }
+    },
+    "logTabBarItem_title" : {
+      "comment" : "Log tab bar item title",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Журнал"
+          }
+        }
+      }
+    },
+    "manyDays" : {
+      "comment" : "Many days pluralize",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "дней"
+          }
+        }
+      }
+    },
+    "manyNotes" : {
+      "comment" : "Many notes pluralize",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "записей"
+          }
+        }
+      }
+    },
+    "oneDay" : {
+      "comment" : "One day pluralize",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "день"
+          }
+        }
+      }
+    },
+    "oneNote" : {
+      "comment" : "One note pluralize",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "запись"
+          }
+        }
+      }
+    },
+    "settings_title" : {
+      "comment" : "Settings screen title",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Настройки"
+          }
+        }
+      }
+    },
+    "settingsTabBarItem_title" : {
+      "comment" : "Settings tab bar item title",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Настройки"
+          }
+        }
+      }
+    },
+    "statisticsTabBarItem_title" : {
+      "comment" : "Statistics tab bar item title",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Статистика"
+          }
+        }
+      }
+    },
+    "streakLabel_text" : {
+      "comment" : "Streak label text",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "серия:"
+          }
+        }
+      }
+    },
+    "touchID_title" : {
+      "comment" : "Touch ID settings switcher title",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Вход по отпечатку пальца"
           }
         }
       }

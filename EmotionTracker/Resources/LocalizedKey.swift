@@ -23,6 +23,14 @@ struct LocalizedKey {
         static let settingsTabBarItemTitle = NSLocalizedString("settingsTabBarItem_title", comment: "Settings tab bar item title")
     }
     
+    enum Settings {
+        static let settingsTitle = NSLocalizedString("settings_title", comment: "Settings screen title")
+        static let defaultProfileFullNameLabelText = NSLocalizedString("defaultProfileFullNameLabel_text", comment: "Default profile full name label text")
+        static let alertTitle = NSLocalizedString("alert_title", comment: "Alert settings switcher title")
+        static let addAlertText = NSLocalizedString("addAlert_text", comment: "Add alert text")
+        static let touchIDTitle = NSLocalizedString("touchID_title", comment: "Touch ID settings switcher title")
+    }
+    
     enum AddNoteButton {
         static let title = NSLocalizedString("addNoteButton_title", comment: "AddNoteButton title")
     }
