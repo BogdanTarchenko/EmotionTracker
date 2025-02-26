@@ -16,8 +16,8 @@ class AnimatedGradientView: UIView {
     init(frame: CGRect,
          colors: [UIColor],
          positions: [(x: CGFloat, y: CGFloat, radius: CGFloat)],
-         animationDuration: CFTimeInterval = 24,
-         animationRadius: CGFloat = 150)
+         animationDuration: CFTimeInterval = Metrics.animationDuration,
+         animationRadius: CGFloat = Metrics.animationRadius)
     {
         self.gradientLayers = (0..<colors.count).map { _ in CAGradientLayer() }
         self.animationDuration = animationDuration
@@ -35,12 +35,12 @@ class AnimatedGradientView: UIView {
         for (index, gradientLayer) in gradientLayers.enumerated() {
             gradientLayer.frame = bounds
             gradientLayer.type = .radial
-            gradientLayer.colors = [colors[index].cgColor, colors[index].withAlphaComponent(0.0).cgColor]
-            gradientLayer.locations = [0.0, 1.0]
+            gradientLayer.colors = [colors[index].cgColor, colors[index].withAlphaComponent(0).cgColor]
+            gradientLayer.locations = Metrics.gradientLocations
             
             let center = CGPoint(x: bounds.width * positions[index].x, y: bounds.height * positions[index].y)
-            gradientLayer.startPoint = CGPoint(x: 0.5, y: 0.5)
-            gradientLayer.endPoint = CGPoint(x: 1.0, y: 1.0)
+            gradientLayer.startPoint = Metrics.startPoint
+            gradientLayer.endPoint = Metrics.endPoint
             gradientLayer.bounds = CGRect(x: 0, y: 0, width: positions[index].radius * 2, height: positions[index].radius * 2)
             gradientLayer.position = center
             
@@ -65,5 +65,17 @@ class AnimatedGradientView: UIView {
         
         animation.path = path.cgPath
         layer.add(animation, forKey: "position")
+    }
+}
+
+// MARK: Metrics
+
+private extension AnimatedGradientView {
+    enum Metrics {
+        static let animationDuration: CGFloat = 24
+        static let animationRadius: CGFloat = 150
+        static let gradientLocations: [NSNumber] = [0.0, 1.0]
+        static let startPoint: CGPoint = CGPoint(x: 0.5, y: 0.5)
+        static let endPoint: CGPoint = CGPoint(x: 1.0, y: 1.0)
     }
 }

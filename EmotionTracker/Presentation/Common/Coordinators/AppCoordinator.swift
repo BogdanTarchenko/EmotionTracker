@@ -26,4 +26,11 @@ final class AppCoordinator: Coordinator {
         childCoordinators.append(welcomeCoordinator)
         welcomeCoordinator.start()
     }
+    
+    private func showTabBar() {
+        let tabBarCoordinator = TabBarCoordinator(navigationController: navigationController)
+        tabBarCoordinator.parentCoordinator = self
+        childCoordinators.append(tabBarCoordinator)
+        tabBarCoordinator.start()
+    }
 }

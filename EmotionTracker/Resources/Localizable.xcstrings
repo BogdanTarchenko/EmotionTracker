@@ -12,6 +12,17 @@
         }
       }
     },
+    "log_title" : {
+      "comment" : "Log screen title",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Что вы сейчас чувствуете?"
+          }
+        }
+      }
+    },
     "welcome_title" : {
       "comment" : "Welcome screen title",
       "localizations" : {

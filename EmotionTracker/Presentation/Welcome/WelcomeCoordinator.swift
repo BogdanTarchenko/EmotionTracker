@@ -23,14 +23,14 @@ final class WelcomeCoordinator: Coordinator {
     }
     
     func handleAppleIDAuthentication() {
-        showLogScreen()
+        showTabBar()
     }
     
-    private func showLogScreen() {
-        let mainCoordinator = LogCoordinator(navigationController: navigationController)
-        mainCoordinator.parentCoordinator = parentCoordinator
-        parentCoordinator?.childCoordinators.append(mainCoordinator)
+    private func showTabBar() {
+        let tabBarCoordinator = TabBarCoordinator(navigationController: navigationController)
+        tabBarCoordinator.parentCoordinator = parentCoordinator
+        parentCoordinator?.childCoordinators.append(tabBarCoordinator)
         finish()
-        mainCoordinator.start()
+        tabBarCoordinator.start()
     }
 }

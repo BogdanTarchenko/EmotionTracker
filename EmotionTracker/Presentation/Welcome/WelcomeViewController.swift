@@ -10,55 +10,70 @@ import SnapKit
 
 final class WelcomeViewController: UIViewController {
     weak var coordinator: WelcomeCoordinator?
-
+    
+    private var animatedBackground: AnimatedGradientView?
+    private var appleIDButton = AppleIDButton(title: Constants.appleIDButtonTitle)
+    private var welcomeTitleLabel = UILabel()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
+        setupConstraints()
     }
 }
+
+// MARK: - Setup UI & Constraints
 
 private extension WelcomeViewController {
     func setupUI() {
         view.backgroundColor = .white
         
-        let animatedBackground = AnimatedGradientView(
+        configureAnimatedBackground()
+        configureAppleIDButton()
+        configureWelcomeTitleLabel()
+    }
+    
+    func configureAnimatedBackground() {
+        animatedBackground = AnimatedGradientView(
             frame: view.bounds,
             colors: Metrics.gradientColors,
             positions: Metrics.gradientPositions
         )
-        
-        view.addSubview(animatedBackground)
-        
-        let appleIDButton = AppleIDButton(title: Constants.appleIDButtonTitle)
-        
+    }
+    
+    func configureAppleIDButton() {
         appleIDButton.onTap = {
             self.handleAppleIDButtonTapped()
         }
-        
+    }
+    
+    func configureWelcomeTitleLabel() {
+        welcomeTitleLabel.text = Constants.welcomeTitle
+        welcomeTitleLabel.numberOfLines = Metrics.welcomeTitleLabelNumberOfLines
+        welcomeTitleLabel.textColor = Constants.titleTextColor
+        welcomeTitleLabel.font = Constants.titleFont
+    }
+    
+    func setupConstraints() {
+        view.addSubview(animatedBackground!)
         view.addSubview(appleIDButton)
+        view.addSubview(welcomeTitleLabel)
         
         appleIDButton.snp.makeConstraints { make in
             make.horizontalEdges.equalToSuperview().inset(Metrics.horizontalEdgesInset)
             make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).inset(Metrics.appleIDButtonBottomInset)
         }
         
-        let welcomeTitleLabel: UILabel = {
-            let label = UILabel()
-            label.text = Constants.welcomeTitle
-            label.numberOfLines = Metrics.welcomeTitleLabelNumberOfLines
-            label.textColor = Constants.titleTextColor
-            label.font = Constants.titleFont
-            return label
-        }()
-        
-        view.addSubview(welcomeTitleLabel)
-        
         welcomeTitleLabel.snp.makeConstraints { make in
             make.horizontalEdges.equalToSuperview().inset(Metrics.horizontalEdgesInset)
-            make.top.equalTo(view.safeAreaLayoutGuide.snp.top).inset(Metrics.welcomeTitleLabelTopInset)
+            make.top.equalTo(view.safeAreaLayoutGuide.snp.top)
         }
     }
-    
+}
+
+// MARK: - Button Actions
+
+private extension WelcomeViewController {
     @objc func handleAppleIDButtonTapped() {
         coordinator?.handleAppleIDAuthentication()
     }
