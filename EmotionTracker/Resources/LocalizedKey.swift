@@ -28,7 +28,7 @@ struct LocalizedKey {
         static let defaultProfileFullNameLabelText = NSLocalizedString("defaultProfileFullNameLabel_text", comment: "Default profile full name label text")
         static let alertTitle = NSLocalizedString("alert_title", comment: "Alert settings switcher title")
         static let addAlertText = NSLocalizedString("addAlert_text", comment: "Add alert text")
-        static let touchIDTitle = NSLocalizedString("touchID_title", comment: "Touch ID settings switcher title")
+        static let faceIDTitle = NSLocalizedString("faceID_title", comment: "Face ID settings switcher title")
     }
     
     enum AddNoteButton {
@@ -48,5 +48,11 @@ struct LocalizedKey {
         static let oneDay = NSLocalizedString("oneDay", comment: "One day pluralize")
         static let fewDays = NSLocalizedString("fewDays", comment: "Few days pluralize")
         static let manyDays = NSLocalizedString("manyDays", comment: "Many days pluralize")
+    }
+    
+    enum AlertTimePicker {
+        static let pickTimeText = NSLocalizedString("pickTime_text", comment: "Pick time text")
+        static let cancelButtonText = NSLocalizedString("cancelButton_text", comment: "Cancel button text")
+        static let pickButtonText = NSLocalizedString("pickButton_text", comment: "Pick button text")
     }
 }

@@ -11,18 +11,21 @@ import SnapKit
 class SettingsViewController: UIViewController {
     weak var coordinator: SettingsCoordinator?
     
+    private var viewModel = SettingsViewModel()
+    
     private var settingsTitleLabel = UILabel()
     private var profileImageView = UIImageView()
     private var profileFullNameLabel = UILabel()
     private var alertSettingsSwitcherView = SettingsSwitcherView(image: Constants.alertImage, title: Constants.alertTitle)
-    private var settingsAlertTimeView = SettingsAlertTimeView(time: "20:00") // TODO: - заглушка, потом исправить
+    private var settingsAlertTimeView = SettingsAlertTimeView()
     private var addAlertButton = AddAlertButton()
-    private var touchIDSettingsSwitcherView = SettingsSwitcherView(image: Constants.touchIDImage, title: Constants.touchIDTitle)
+    private var touchIDSettingsSwitcherView = SettingsSwitcherView(image: Constants.faceIDImage, title: Constants.faceIDTitle)
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
         setupConstraints()
+        setupButtonActions()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -121,6 +124,24 @@ private extension SettingsViewController {
     }
 }
 
+// MARK: - Button Actions
+
+private extension SettingsViewController {
+    func setupButtonActions() {
+        addAlertButton.onButtonTapped = {
+            TimePickerManager.showTimePicker(on: self) { selectedTime in
+                self.viewModel.updateAlertTime(with: selectedTime)
+                self.settingsAlertTimeView.updateTimeLabel(with: self.viewModel.alertTime)
+            }
+        }
+        
+        settingsAlertTimeView.onButtonTapped = {
+            self.viewModel.clearAlertTime()
+            self.settingsAlertTimeView.clearTimeLabel()
+        }
+    }
+}
+
 // MARK: - Metrics & Constants
 
 private extension SettingsViewController {
@@ -149,7 +170,7 @@ private extension SettingsViewController {
         static let defaultProfileFullNameLabelTextColor: UIColor = .textPrimary
         static let alertImage: UIImage = UIImage(named: "AlertImg")!
         static let alertTitle: String = LocalizedKey.Settings.alertTitle
-        static let touchIDImage: UIImage = UIImage(named: "TouchIDImg")!
-        static let touchIDTitle: String = LocalizedKey.Settings.touchIDTitle
+        static let faceIDImage: UIImage = UIImage(systemName: "faceid")!
+        static let faceIDTitle: String = LocalizedKey.Settings.faceIDTitle
     }
 }

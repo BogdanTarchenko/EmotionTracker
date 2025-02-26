@@ -10,13 +10,16 @@ import SnapKit
 
 class SettingsAlertTimeView: UIView {
     
+    var onButtonTapped: (() -> Void)?
+    
     private var timeLabel = UILabel()
     private var iconImageView = UIButton()
     
-    init(time: String) {
+    init(time: String = Constants.defaultTime) {
         super.init(frame: .zero)
         setupUI(time: time)
         setupConstraints()
+        setupButtonActions()
     }
     
     required init?(coder: NSCoder) {
@@ -60,6 +63,30 @@ private extension SettingsAlertTimeView {
             make.size.equalTo(Metrics.iconImageSize)
         }
     }
+    
+    func setupButtonActions() {
+        iconImageView.addTarget(self, action: #selector(buttonTapped), for: .touchUpInside)
+    }
+}
+
+// MARK: - Public methods
+
+extension SettingsAlertTimeView {
+    func updateTimeLabel(with time: String) {
+        timeLabel.text = time
+    }
+    
+    func clearTimeLabel() {
+        timeLabel.text = Constants.defaultTime
+    }
+}
+
+// MARK: - Button Actions
+
+private extension SettingsAlertTimeView {
+    @objc private func buttonTapped() {
+        onButtonTapped?()
+    }
 }
 
 // MARK: - Metrics & Constants
@@ -72,11 +99,12 @@ private extension SettingsAlertTimeView {
         static let iconImageVerticalInset: CGFloat = 8
         static let iconImageSize: CGFloat = 48
     }
-
+    
     enum Constants {
         static let iconImage: UIImage = UIImage(named: "BinImg")!
         static let timeLabelTextColor: UIColor = .textPrimary
         static let timeLabelFont: UIFont = UIFont(name: "VelaSans-Regular", size: 20)!
         static let backgroundColor: UIColor = .alertTimeView
+        static let defaultTime: String = ""
     }
 }

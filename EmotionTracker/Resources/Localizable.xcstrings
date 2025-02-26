@@ -45,6 +45,17 @@
         }
       }
     },
+    "cancelButton_text" : {
+      "comment" : "Cancel button text",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Отмена"
+          }
+        }
+      }
+    },
     "dailyGoalLabel_text" : {
       "comment" : "Daily goal label text",
       "localizations" : {
@@ -63,6 +74,17 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Иван Иванов"
+          }
+        }
+      }
+    },
+    "faceID_title" : {
+      "comment" : "Face ID settings switcher title",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Вход по распознаванию лица"
           }
         }
       }
@@ -166,6 +188,28 @@
         }
       }
     },
+    "pickButton_text" : {
+      "comment" : "Pick button text",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Выбрать"
+          }
+        }
+      }
+    },
+    "pickTime_text" : {
+      "comment" : "Pick time text",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Выберите время"
+          }
+        }
+      }
+    },
     "settings_title" : {
       "comment" : "Settings screen title",
       "localizations" : {
@@ -206,17 +250,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "серия:"
-          }
-        }
-      }
-    },
-    "touchID_title" : {
-      "comment" : "Touch ID settings switcher title",
-      "localizations" : {
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Вход по отпечатку пальца"
           }
         }
       }
