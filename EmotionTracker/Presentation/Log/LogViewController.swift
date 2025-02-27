@@ -35,6 +35,7 @@ final class LogViewController: UIViewController {
         super.viewDidLoad()
         setupUI()
         setupConstraints()
+        setupButtonActions()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -143,6 +144,27 @@ private extension LogViewController {
         }
     }
 }
+
+// MARK: - Button Actions
+
+private extension LogViewController {
+    
+    @objc func handleEmotionCardTapped() {
+        coordinator?.handleEmotionCardTapped()
+    }
+    
+    func setupButtonActions() {
+        firstEmotionCard.onTap = {
+            self.handleEmotionCardTapped()
+        }
+        
+        secondEmotionCard.onTap = {
+            self.handleEmotionCardTapped()
+        }
+    }
+}
+
+// MARK: - Metrics & Constants
 
 private extension LogViewController {
     enum Metrics {

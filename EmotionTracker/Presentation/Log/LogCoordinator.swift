@@ -21,4 +21,18 @@ final class LogCoordinator: Coordinator {
         logViewController.coordinator = self
         navigationController.setViewControllers([logViewController], animated: true)
     }
+    
+    func handleEmotionCardTapped() {
+        showEditNote()
+        print("handle")
+    }
+    
+    private func showEditNote() {
+        let editNoteCoordinator = EditNoteCoordinator(navigationController: navigationController)
+        editNoteCoordinator.parentCoordinator = parentCoordinator
+        parentCoordinator?.childCoordinators.append(editNoteCoordinator)
+        finish()
+        editNoteCoordinator.start()
+        print("start")
+    }
 }
