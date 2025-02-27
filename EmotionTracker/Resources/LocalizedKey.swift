@@ -31,6 +31,10 @@ struct LocalizedKey {
         static let faceIDTitle = NSLocalizedString("faceID_title", comment: "Face ID settings switcher title")
     }
     
+    enum EditNote {
+        static let navigationBarTitle = NSLocalizedString("editNoteNavigation_title", comment: "EditNote screen navigation title")
+    }
+    
     enum AddNoteButton {
         static let title = NSLocalizedString("addNoteButton_title", comment: "AddNoteButton title")
     }

@@ -24,15 +24,12 @@ final class LogCoordinator: Coordinator {
     
     func handleEmotionCardTapped() {
         showEditNote()
-        print("handle")
     }
     
     private func showEditNote() {
         let editNoteCoordinator = EditNoteCoordinator(navigationController: navigationController)
         editNoteCoordinator.parentCoordinator = parentCoordinator
-        parentCoordinator?.childCoordinators.append(editNoteCoordinator)
-        finish()
+        childCoordinators.append(editNoteCoordinator)
         editNoteCoordinator.start()
-        print("start")
     }
 }

@@ -78,6 +78,17 @@
         }
       }
     },
+    "editNoteNavigation_title" : {
+      "comment" : "EditNote screen navigation title",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Запись"
+          }
+        }
+      }
+    },
     "faceID_title" : {
       "comment" : "Face ID settings switcher title",
       "localizations" : {

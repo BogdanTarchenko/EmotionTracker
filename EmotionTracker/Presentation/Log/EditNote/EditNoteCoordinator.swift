@@ -19,6 +19,10 @@ final class EditNoteCoordinator: Coordinator {
     func start() {
         let editNoteViewController = EditNoteViewController()
         editNoteViewController.coordinator = self
-        navigationController.setViewControllers([editNoteViewController], animated: true)
+        navigationController.pushViewController(editNoteViewController, animated: true)
+    }
+    
+    func handleBackButtonTapped() {
+        navigationController.popViewController(animated: true)
     }
 }
