@@ -11,6 +11,8 @@ import SnapKit
 class EditNoteViewController: UIViewController {
     weak var coordinator: EditNoteCoordinator?
     
+    private var scrollView = UIScrollView()
+    private var contentView = UIView()
     private var navigationBar = DefaultNavBar(title: Constants.navigationBarTitle)
 
     override func viewDidLoad() {
@@ -37,14 +39,34 @@ private extension EditNoteViewController {
     func setupUI() {
         view.backgroundColor = Constants.backgroundColor
         configureNavigationBar()
+        configureScrollView()
+    }
+    
+    func configureScrollView() {
+        scrollView.contentInsetAdjustmentBehavior = .never
+        scrollView.backgroundColor = .clear
     }
     
     func setupConstraints() {
-        view.addSubview(navigationBar)
+        view.addSubview(scrollView)
+        scrollView.addSubview(contentView)
+        contentView.addSubview(navigationBar)
+        
+        scrollView.snp.makeConstraints { make in
+            make.top.equalTo(view.safeAreaLayoutGuide.snp.top)
+            make.horizontalEdges.equalToSuperview()
+            make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
+        }
+        
+        contentView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+            make.width.equalToSuperview()
+        }
         
         navigationBar.snp.makeConstraints { make in
             make.leading.trailing.equalToSuperview().inset(Metrics.defaultHorizontalInset)
             make.top.equalTo(view.safeAreaLayoutGuide.snp.top)
+            make.bottom.equalToSuperview()
         }
     }
 }
