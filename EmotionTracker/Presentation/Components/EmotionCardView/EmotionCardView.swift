@@ -20,9 +20,12 @@ class EmotionCardView: UIView {
     private let emotionLabel = UILabel()
     private let iconView = UIImageView()
     
+    var onTap: (() -> Void)?
+    
     init(time: String, emotion: String, emotionColor: EmotionColor, icon: UIImage?) {
         super.init(frame: .zero)
         setupView(time: time, emotion: emotion, emotionColor: emotionColor, icon: icon)
+        setupGesture()
     }
     
     required init?(coder: NSCoder) {
@@ -71,6 +74,12 @@ class EmotionCardView: UIView {
         }
     }
     
+    private func setupGesture() {
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTap))
+        self.addGestureRecognizer(tapGesture)
+        self.isUserInteractionEnabled = true
+    }
+    
     private func applyGradientOverlay(colors: [CGColor]) {
         let gradientLayer = CAGradientLayer()
         gradientLayer.colors = colors
@@ -82,6 +91,22 @@ class EmotionCardView: UIView {
     override func layoutSubviews() {
         super.layoutSubviews()
         layer.sublayers?.first?.frame = bounds
+    }
+}
+
+// MARK: - Button Actions
+
+private extension EmotionCardView {
+    @objc private func handleTap() {
+        UIView.animate(withDuration: 0.1, animations: {
+            self.alpha = 0.7
+        }, completion: { _ in
+            UIView.animate(withDuration: 0.1) {
+                self.alpha = 1.0
+            }
+        })
+        
+        onTap?()
     }
 }
 
