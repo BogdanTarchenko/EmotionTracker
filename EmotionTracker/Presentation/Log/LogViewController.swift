@@ -23,20 +23,12 @@ final class LogViewController: UIViewController {
     // TODO: - Тестовые карточки, поэтому хардкод, потом исправить.
     private var firstEmotionCard = EmotionCardView(time: "вчера, 23:40",
                                                    emotion: "выгорание",
-                                                   emotionColor: .testEmotion,
-                                                   gradientColors: [
-                                                    UIColor(red: 0/255, green: 170/255, blue: 255/255, alpha: 1).cgColor,
-                                                    UIColor(red: 0/255, green: 170/255, blue: 255/255, alpha: 0).cgColor
-                                                   ],
+                                                   emotionColor: .blue,
                                                    icon: UIImage(named: "TestEmotionImg"))
     
     private var secondEmotionCard = EmotionCardView(time: "вчера, 23:40",
                                                     emotion: "выгорание",
-                                                    emotionColor: .testEmotion,
-                                                    gradientColors: [
-                                                        UIColor(red: 0/255, green: 170/255, blue: 255/255, alpha: 1).cgColor,
-                                                        UIColor(red: 0/255, green: 170/255, blue: 255/255, alpha: 0).cgColor
-                                                    ],
+                                                    emotionColor: .green,
                                                     icon: UIImage(named: "TestEmotionImg"))
     
     override func viewDidLoad() {

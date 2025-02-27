@@ -6,7 +6,6 @@
 //
 
 import UIKit
-import SnapKit
 
 class EmotionCardView: UIView {
     
@@ -21,18 +20,18 @@ class EmotionCardView: UIView {
     private let emotionLabel = UILabel()
     private let iconView = UIImageView()
     
-    init(time: String, emotion: String, emotionColor: UIColor, gradientColors: [CGColor], icon: UIImage?) {
+    init(time: String, emotion: String, emotionColor: EmotionColor, icon: UIImage?) {
         super.init(frame: .zero)
-        setupView(time: time, emotion: emotion, emotionColor: emotionColor, gradientColors: gradientColors, icon: icon)
+        setupView(time: time, emotion: emotion, emotionColor: emotionColor, icon: icon)
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    private func setupView(time: String, emotion: String, emotionColor: UIColor, gradientColors: [CGColor], icon: UIImage?) {
+    private func setupView(time: String, emotion: String, emotionColor: EmotionColor, icon: UIImage?) {
         backgroundColor = .buttonSecondary
-        applyGradientOverlay(colors: gradientColors)
+        applyGradientOverlay(colors: emotionColor.gradientColors)
         self.layer.cornerRadius = Metrics.layerCornerRadius
         self.clipsToBounds = true
         
@@ -41,7 +40,7 @@ class EmotionCardView: UIView {
         timeLabel.font = Constants.timeLabelFont
         
         emotionLabel.text = emotion
-        emotionLabel.textColor = emotionColor
+        emotionLabel.textColor = emotionColor.textColor
         emotionLabel.font = Constants.emotionLabelFont
         
         iconView.image = icon
