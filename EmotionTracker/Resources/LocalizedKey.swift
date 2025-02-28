@@ -33,6 +33,7 @@ struct LocalizedKey {
     
     enum EditNote {
         static let navigationBarTitle = NSLocalizedString("editNoteNavigation_title", comment: "EditNote screen navigation title")
+        static let saveNoteButtonTitle = NSLocalizedString("saveNoteButton_title", comment: "Save note button title")
     }
     
     enum AddNoteButton {

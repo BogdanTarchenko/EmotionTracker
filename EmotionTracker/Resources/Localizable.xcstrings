@@ -221,6 +221,17 @@
         }
       }
     },
+    "saveNoteButton_title" : {
+      "comment" : "Save note button title",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Сохранить"
+          }
+        }
+      }
+    },
     "settings_title" : {
       "comment" : "Settings screen title",
       "localizations" : {
