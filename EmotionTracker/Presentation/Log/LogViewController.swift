@@ -153,6 +153,10 @@ private extension LogViewController {
         coordinator?.handleEmotionCardTapped()
     }
     
+    @objc func handleAddNoteButtonTapped() {
+        coordinator?.handleAddNoteButtonTapped()
+    }
+    
     func setupButtonActions() {
         firstEmotionCard.onTap = {
             self.handleEmotionCardTapped()
@@ -160,6 +164,10 @@ private extension LogViewController {
         
         secondEmotionCard.onTap = {
             self.handleEmotionCardTapped()
+        }
+        
+        addNoteButton.onButtonTapped = {
+            self.handleAddNoteButtonTapped()
         }
     }
 }

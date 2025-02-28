@@ -126,6 +126,10 @@ private extension EditNoteViewController {
         navigationBar.onButtonTapped = {
             self.coordinator?.handleBackButtonTapped()
         }
+        
+        saveNoteButton.onButtonTapped = {
+            self.coordinator?.handleSaveButtonTapped()
+        }
     }
 }
 

@@ -36,6 +36,10 @@ struct LocalizedKey {
         static let saveNoteButtonTitle = NSLocalizedString("saveNoteButton_title", comment: "Save note button title")
     }
     
+    enum AddNote {
+        
+    }
+    
     enum AddNoteButton {
         static let title = NSLocalizedString("addNoteButton_title", comment: "AddNoteButton title")
     }

@@ -1,13 +1,13 @@
 //
-//  EditNoteCoordinator.swift
+//  AddNoteCoordinator.swift
 //  EmotionTracker
 //
-//  Created by Богдан Тарченко on 27.02.2025.
+//  Created by Богдан Тарченко on 28.02.2025.
 //
 
 import UIKit
 
-final class EditNoteCoordinator: Coordinator {
+final class AddNoteCoordinator: Coordinator {
     var navigationController: UINavigationController
     var parentCoordinator: Coordinator?
     var childCoordinators: [Coordinator] = []
@@ -17,16 +17,12 @@ final class EditNoteCoordinator: Coordinator {
     }
     
     func start() {
-        let editNoteViewController = EditNoteViewController()
-        editNoteViewController.coordinator = self
-        navigationController.pushViewController(editNoteViewController, animated: true)
+        let addNoteViewController = AddNoteViewController()
+        addNoteViewController.coordinator = self
+        navigationController.pushViewController(addNoteViewController, animated: true)
     }
     
     func handleBackButtonTapped() {
-        navigationController.popViewController(animated: true)
-    }
-    
-    func handleSaveButtonTapped() {
         navigationController.popViewController(animated: true)
     }
 }

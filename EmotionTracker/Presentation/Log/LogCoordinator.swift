@@ -26,10 +26,21 @@ final class LogCoordinator: Coordinator {
         showEditNote()
     }
     
+    func handleAddNoteButtonTapped() {
+        showAddNote()
+    }
+    
     private func showEditNote() {
         let editNoteCoordinator = EditNoteCoordinator(navigationController: navigationController)
         editNoteCoordinator.parentCoordinator = parentCoordinator
         childCoordinators.append(editNoteCoordinator)
         editNoteCoordinator.start()
+    }
+    
+    private func showAddNote() {
+        let addNoteCoordinator = AddNoteCoordinator(navigationController: navigationController)
+        addNoteCoordinator.parentCoordinator = parentCoordinator
+        childCoordinators.append(addNoteCoordinator)
+        addNoteCoordinator.start()
     }
 }
