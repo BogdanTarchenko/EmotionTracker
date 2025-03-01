@@ -23,7 +23,6 @@ class EmotionPicker: UIView {
     private var emotionTitleLabel = UILabel()
     private var emotionDescriptionLabel = UILabel()
     
-    
     init(state: EmotionPickerState) {
         self.state = state
         super.init(frame: .zero)
@@ -53,7 +52,7 @@ private extension EmotionPicker {
         pickEmotionTitleLabel.text = Constants.pickEmotionTitle
         pickEmotionTitleLabel.textColor = Constants.pickEmotionTitleColor
         pickEmotionTitleLabel.font = Constants.pickEmotionTitleFont
-        pickEmotionTitleLabel.numberOfLines = 2
+        pickEmotionTitleLabel.numberOfLines = Metrics.defaultNumberOfLines
     }
     
     func configureEmotionTitleLabel() {
@@ -63,7 +62,7 @@ private extension EmotionPicker {
     func configureEmotionDescription() {
         emotionDescriptionLabel.font = Constants.emotionDescriptionFont
         emotionDescriptionLabel.textColor = Constants.emotionDescriptionColor
-        emotionDescriptionLabel.numberOfLines = 2
+        emotionDescriptionLabel.numberOfLines = Metrics.defaultNumberOfLines
     }
     
     func setupConstraints() {
@@ -74,24 +73,24 @@ private extension EmotionPicker {
         
         pickEmotionTitleLabel.snp.makeConstraints { make in
             make.centerY.equalToSuperview()
-            make.leading.equalToSuperview().inset(24)
-            make.trailing.equalTo(pickEmotionButton.snp.leading).offset(-16)
+            make.leading.equalToSuperview().inset(Metrics.defaultHorizontalInset)
+            make.trailing.equalTo(pickEmotionButton.snp.leading).offset(Metrics.pickEmotionTitleLabelTrailingEdgeOffset)
         }
         
         pickEmotionButton.snp.makeConstraints { make in
-            make.top.bottom.trailing.equalToSuperview().inset(8)
-            make.size.equalTo(64)
+            make.top.bottom.trailing.equalToSuperview().inset(Metrics.pickEmotionButtonInset)
+            make.size.equalTo(Metrics.pickEmotionButtonSize)
         }
         
         emotionTitleLabel.snp.makeConstraints { make in
-            make.leading.equalToSuperview().inset(24)
-            make.top.equalToSuperview().inset(22)
+            make.leading.equalToSuperview().inset(Metrics.defaultHorizontalInset)
+            make.top.equalToSuperview().inset(Metrics.defaultVerticalInset)
         }
         
         emotionDescriptionLabel.snp.makeConstraints { make in
-            make.leading.equalToSuperview().inset(24)
+            make.leading.equalToSuperview().inset(Metrics.defaultHorizontalInset)
             make.top.equalTo(emotionTitleLabel.snp.bottom)
-            make.bottom.equalToSuperview().inset(22)
+            make.bottom.equalToSuperview().inset(Metrics.defaultVerticalInset)
         }
     }
     
@@ -135,6 +134,12 @@ private extension EmotionPicker {
 private extension EmotionPicker {
     enum Metrics {
         static let layerCornerRadius: CGFloat = 40
+        static let defaultHorizontalInset: CGFloat = 24
+        static let defaultVerticalInset: CGFloat = 22
+        static let pickEmotionButtonInset: CGFloat = 8
+        static let pickEmotionButtonSize: CGFloat = 64
+        static let pickEmotionTitleLabelTrailingEdgeOffset: CGFloat = -16
+        static let defaultNumberOfLines: Int = 2
     }
     
     enum Constants {
