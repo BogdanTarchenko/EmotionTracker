@@ -11,9 +11,8 @@ import SnapKit
 class AddNoteViewController: UIViewController {
     weak var coordinator: AddNoteCoordinator?
     
-    private var scrollView = UIScrollView()
-    private var contentView = UIView()
     private var navigationBar = DefaultNavBar(title: nil)
+    private var emotionPicker = EmotionPicker(state: .active(emotionTitle: "Усталость", emotionDescription: "ощущение, что необходимо отдохнуть", emotionColor: .bluePrimary))
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -39,33 +38,20 @@ private extension AddNoteViewController {
     func setupUI() {
         view.backgroundColor = Constants.backgroundColor
         configureNavigationBar()
-        configureScrollView()
-    }
-    
-    func configureScrollView() {
-        scrollView.contentInsetAdjustmentBehavior = .never
-        scrollView.backgroundColor = .clear
     }
     
     func setupConstraints() {
-        view.addSubview(scrollView)
         view.addSubview(navigationBar)
-        scrollView.addSubview(contentView)
-        
-        scrollView.snp.makeConstraints { make in
-            make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(Metrics.scrollViewTopEdgeOffset)
-            make.horizontalEdges.equalToSuperview()
-            make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
-        }
-        
-        contentView.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
-            make.width.equalToSuperview()
-        }
+        view.addSubview(emotionPicker)
         
         navigationBar.snp.makeConstraints { make in
             make.leading.trailing.equalToSuperview().inset(Metrics.defaultHorizontalInset)
             make.top.equalTo(view.safeAreaLayoutGuide.snp.top)
+        }
+        
+        emotionPicker.snp.makeConstraints { make in
+            make.leading.trailing.equalToSuperview().inset(Metrics.defaultHorizontalInset)
+            make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
         }
     }
 }
@@ -83,7 +69,6 @@ private extension AddNoteViewController {
 private extension AddNoteViewController {
     enum Metrics {
         static let defaultHorizontalInset: CGFloat = 24
-        static let scrollViewTopEdgeOffset: CGFloat = 60
     }
     
     enum Constants {

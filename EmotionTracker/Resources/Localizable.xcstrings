@@ -210,6 +210,17 @@
         }
       }
     },
+    "pickEmotion_title" : {
+      "comment" : "Pick emotion title",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Выберите эмоцию, лучше всего описывающую, что вы сейчас чувствуете"
+          }
+        }
+      }
+    },
     "pickTime_text" : {
       "comment" : "Pick time text",
       "localizations" : {

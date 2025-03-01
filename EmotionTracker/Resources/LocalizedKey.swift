@@ -37,7 +37,7 @@ struct LocalizedKey {
     }
     
     enum AddNote {
-        
+        static let pickEmotionTitle = NSLocalizedString("pickEmotion_title", comment: "Pick emotion title")
     }
     
     enum AddNoteButton {
