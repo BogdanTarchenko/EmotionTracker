@@ -8,15 +8,14 @@
 import Foundation
 
 class SettingsViewModel {
-    var alertTime: String = ""
+    var alertTimes: [String] = []
     
-    func updateAlertTime(with time: Date) {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "HH:mm"
-        alertTime = formatter.string(from: time)
+    func addAlertTime(_ time: String) {
+        alertTimes.append(time)
     }
     
-    func clearAlertTime() {
-        alertTime = ""
+    func removeAlertTime(at index: Int) {
+        guard index < alertTimes.count else { return }
+        alertTimes.remove(at: index)
     }
 }

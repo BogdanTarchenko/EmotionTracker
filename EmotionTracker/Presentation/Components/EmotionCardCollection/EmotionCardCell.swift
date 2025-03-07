@@ -1,5 +1,5 @@
 //
-//  EmotionCardView.swift
+//  EmotionCardCell.swift
 //  EmotionTracker
 //
 //  Created by Богдан Тарченко on 24.02.2025.
@@ -7,7 +7,8 @@
 
 import UIKit
 
-class EmotionCardView: UIView {
+class EmotionCardCell: UICollectionViewCell {
+    static let reuseIdentifier = "EmotionCardCell"
     
     private let timeLabel = UILabel()
     private let feelingLabel: UILabel = {
@@ -22,9 +23,10 @@ class EmotionCardView: UIView {
     
     var onTap: (() -> Void)?
     
-    init(time: String, emotion: String, emotionColor: EmotionColor, icon: UIImage?) {
-        super.init(frame: .zero)
-        setupView(time: time, emotion: emotion, emotionColor: emotionColor, icon: icon)
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        setupUI()
+        setupConstraints()
         setupGesture()
     }
     
@@ -32,27 +34,49 @@ class EmotionCardView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    private func setupView(time: String, emotion: String, emotionColor: EmotionColor, icon: UIImage?) {
-        backgroundColor = .buttonSecondary
-        applyGradientOverlay(colors: emotionColor.gradientColors)
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        layer.sublayers?.first?.removeFromSuperlayer()
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        layer.sublayers?.first?.frame = bounds
+    }
+}
+
+private extension EmotionCardCell {
+    func setupUI() {
         self.layer.cornerRadius = Metrics.layerCornerRadius
+        backgroundColor = .buttonSecondary
         self.clipsToBounds = true
         
-        timeLabel.text = time
+        configureTimeLabel()
+        configureEmotionLabel()
+        configureImageView()
+    }
+    
+    func configureTimeLabel() {
         timeLabel.textColor = Constants.timeLabelTextColor
         timeLabel.font = Constants.timeLabelFont
-        
-        emotionLabel.text = emotion.lowercased()
-        emotionLabel.textColor = emotionColor.textColor
+    }
+    
+    func configureEmotionLabel() {
         emotionLabel.font = Constants.emotionLabelFont
-        
-        iconView.image = icon
+        emotionLabel.adjustsFontSizeToFitWidth = true
+        emotionLabel.minimumScaleFactor = 0.8
+        emotionLabel.numberOfLines = 1
+    }
+    
+    func configureImageView() {
         iconView.contentMode = .scaleAspectFit
-        
-        addSubview(timeLabel)
-        addSubview(feelingLabel)
-        addSubview(emotionLabel)
-        addSubview(iconView)
+    }
+    
+    func setupConstraints() {
+        contentView.addSubview(timeLabel)
+        contentView.addSubview(feelingLabel)
+        contentView.addSubview(emotionLabel)
+        contentView.addSubview(iconView)
         
         timeLabel.snp.makeConstraints { make in
             make.leading.top.equalToSuperview().inset(Metrics.timeLabelInsets)
@@ -65,6 +89,7 @@ class EmotionCardView: UIView {
         
         emotionLabel.snp.makeConstraints { make in
             make.leading.bottom.equalToSuperview().inset(Metrics.emotionLabelInsets)
+            make.trailing.equalTo(iconView.snp.leading).offset(-Metrics.emotionLabelInsets)
             make.top.equalTo(feelingLabel.snp.bottom)
         }
         
@@ -73,30 +98,34 @@ class EmotionCardView: UIView {
             make.width.height.equalTo(Metrics.iconViewSize)
         }
     }
-    
-    private func setupGesture() {
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTap))
-        self.addGestureRecognizer(tapGesture)
-        self.isUserInteractionEnabled = true
-    }
-    
-    private func applyGradientOverlay(colors: [CGColor]) {
+}
+
+// MARK: - Apply Gradient Overlay
+
+private extension EmotionCardCell {
+    func applyGradientOverlay(colors: [CGColor]) {
         let gradientLayer = CAGradientLayer()
         gradientLayer.colors = colors
         gradientLayer.startPoint = CGPoint(x: 4, y: 0)
         gradientLayer.endPoint = CGPoint(x: 0, y: 1)
+        gradientLayer.frame = bounds
         layer.insertSublayer(gradientLayer, at: 0)
     }
-    
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        layer.sublayers?.first?.frame = bounds
+}
+
+// MARK: - Setup Gesture
+
+private extension EmotionCardCell {
+    func setupGesture() {
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTap))
+        self.addGestureRecognizer(tapGesture)
+        self.isUserInteractionEnabled = true
     }
 }
 
 // MARK: - Button Actions
 
-private extension EmotionCardView {
+private extension EmotionCardCell {
     @objc private func handleTap() {
         UIView.animate(withDuration: 0.1, animations: {
             self.alpha = 0.7
@@ -110,9 +139,25 @@ private extension EmotionCardView {
     }
 }
 
+// MARK: - Public methods
+
+extension EmotionCardCell {
+    func configure(time: String, emotion: String, emotionColor: EmotionColor, icon: UIImage?) {
+        applyGradientOverlay(colors: emotionColor.gradientColors)
+        
+        timeLabel.text = time
+        timeLabel.textColor = Constants.timeLabelTextColor
+        
+        emotionLabel.text = emotion.lowercased()
+        emotionLabel.textColor = emotionColor.textColor
+        
+        iconView.image = icon
+    }
+}
+
 // MARK: - Metrics & Constants
 
-private extension EmotionCardView {
+private extension EmotionCardCell {
     enum Metrics {
         static let layerCornerRadius: CGFloat = 16
         static let timeLabelInsets: CGFloat = 16

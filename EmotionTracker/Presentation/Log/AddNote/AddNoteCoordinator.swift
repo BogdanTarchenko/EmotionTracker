@@ -23,6 +23,14 @@ final class AddNoteCoordinator: Coordinator {
     }
     
     func handleBackButtonTapped() {
+        self.finish()
         navigationController.popViewController(animated: true)
+    }
+    
+    func showEditNote(selectedEmotion: (title: String, color: UIColor)) {
+        let editNoteCoordinator = EditNoteCoordinator(navigationController: navigationController)
+        editNoteCoordinator.parentCoordinator = self
+        childCoordinators.append(editNoteCoordinator)
+        editNoteCoordinator.start(with: selectedEmotion)
     }
 }

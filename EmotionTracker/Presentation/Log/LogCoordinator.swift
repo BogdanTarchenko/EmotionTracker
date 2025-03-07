@@ -12,6 +12,8 @@ final class LogCoordinator: Coordinator {
     var parentCoordinator: Coordinator?
     var childCoordinators: [Coordinator] = []
     
+    private weak var logViewController: LogViewController?
+    
     init(navigationController: UINavigationController) {
         self.navigationController = navigationController
     }
@@ -19,27 +21,34 @@ final class LogCoordinator: Coordinator {
     func start() {
         let logViewController = LogViewController()
         logViewController.coordinator = self
+        self.logViewController = logViewController
         navigationController.setViewControllers([logViewController], animated: true)
     }
     
-    func handleEmotionCardTapped() {
-        showEditNote()
+    func handleEmotionCardTapped(with emotionData: (title: String, color: UIColor, time: String)) {
+        showEditNote(with: emotionData)
     }
     
     func handleAddNoteButtonTapped() {
         showAddNote()
     }
     
-    private func showEditNote() {
+    func handleSaveNewEmotion(title: String, color: UIColor) {
+        if let emotionColor = EmotionColor.from(uiColor: color) {
+            logViewController?.addNewEmotion(title: title, emotionColor: emotionColor)
+        }
+    }
+    
+    private func showEditNote(with emotionData: (title: String, color: UIColor, time: String)) {
         let editNoteCoordinator = EditNoteCoordinator(navigationController: navigationController)
-        editNoteCoordinator.parentCoordinator = parentCoordinator
+        editNoteCoordinator.parentCoordinator = self
         childCoordinators.append(editNoteCoordinator)
-        editNoteCoordinator.start()
+        editNoteCoordinator.start(with: emotionData)
     }
     
     private func showAddNote() {
         let addNoteCoordinator = AddNoteCoordinator(navigationController: navigationController)
-        addNoteCoordinator.parentCoordinator = parentCoordinator
+        addNoteCoordinator.parentCoordinator = self
         childCoordinators.append(addNoteCoordinator)
         addNoteCoordinator.start()
     }

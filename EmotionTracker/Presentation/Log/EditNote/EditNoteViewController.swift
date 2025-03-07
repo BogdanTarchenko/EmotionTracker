@@ -11,13 +11,22 @@ import SnapKit
 class EditNoteViewController: UIViewController {
     weak var coordinator: EditNoteCoordinator?
     
+    var viewModel: EditNoteViewModel!
+    
     private var scrollView = UIScrollView()
     private var contentView = UIView()
     private var navigationBar = DefaultNavBar(title: Constants.navigationBarTitle)
-    private var emotionCardView = EmotionCardView(time: "вчера, 23:40", emotion: "выгорание", emotionColor: .blue, icon: UIImage(named: "TestEmotionImg"))
+    
+    private lazy var emotionCardView: EmotionCardView = {
+        return EmotionCardView(time: viewModel.time,
+                               emotion: viewModel.emotionTitle,
+                               emotionColor: EmotionColor.from(uiColor: viewModel.emotionColor)!,
+                               icon: UIImage(named: "TestEmotionImg"))
+    }()
+    
     private var tagCollectionView = TagCollectionView()
     private var saveNoteButton = SaveNoteButton()
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
@@ -52,7 +61,7 @@ class EditNoteViewController: UIViewController {
             make.height.equalTo(tagCollectionView.intrinsicContentSize.height)
         }
     }
-
+    
 }
 
 private extension EditNoteViewController {
@@ -123,12 +132,12 @@ private extension EditNoteViewController {
 
 private extension EditNoteViewController {
     func setupButtonActions() {
-        navigationBar.onButtonTapped = {
-            self.coordinator?.handleBackButtonTapped()
+        navigationBar.onButtonTapped = { [weak self] in
+            self?.coordinator?.handleBackButtonTapped()
         }
         
-        saveNoteButton.onButtonTapped = {
-            self.coordinator?.handleSaveButtonTapped()
+        saveNoteButton.onButtonTapped = { [weak self] in
+            self?.coordinator?.handleSaveButtonTapped()
         }
     }
 }

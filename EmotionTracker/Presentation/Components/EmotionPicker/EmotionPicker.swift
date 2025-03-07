@@ -107,6 +107,7 @@ private extension EmotionPicker {
             emotionDescriptionLabel.isHidden = true
             
             pickEmotionButton.setImage(Constants.pickEmotionButtonInactiveImage, for: .normal)
+            pickEmotionButton.isUserInteractionEnabled = false
         case .active(let emotionTitle, let emotionDescription, let emotionColor):
             pickEmotionTitleLabel.isHidden = true
             pickEmotionButton.isHidden = false
@@ -117,6 +118,7 @@ private extension EmotionPicker {
             emotionDescriptionLabel.text = emotionDescription
             emotionTitleLabel.textColor = emotionColor
             pickEmotionButton.setImage(Constants.pickEmotionButtonActiveImage, for: .normal)
+            pickEmotionButton.isUserInteractionEnabled = true
         }
     }
 }
@@ -126,6 +128,14 @@ private extension EmotionPicker {
 private extension EmotionPicker {
     @objc private func buttonTapped() {
         onButtonTapped?()
+    }
+}
+
+// MARK: - Public Methods
+
+extension EmotionPicker {
+    func changeState(to newState: EmotionPickerState) {
+        self.state = newState
     }
 }
 

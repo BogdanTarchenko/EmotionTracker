@@ -18,24 +18,17 @@ final class LogViewController: UIViewController {
     private var activityRingView = UIView()
     private var activityRing: ActivityRingView?
     private var addNoteButton = AddNoteButton()
-    private var cardStackView = UIStackView()
     
-    // TODO: - Тестовые карточки, поэтому хардкод, потом исправить.
-    private var firstEmotionCard = EmotionCardView(time: "вчера, 23:40",
-                                                   emotion: "выгорание",
-                                                   emotionColor: .blue,
-                                                   icon: UIImage(named: "TestEmotionImg"))
+    private var viewModel = LogViewModel()
     
-    private var secondEmotionCard = EmotionCardView(time: "вчера, 23:40",
-                                                    emotion: "выгорание",
-                                                    emotionColor: .green,
-                                                    icon: UIImage(named: "TestEmotionImg"))
+    private var collectionView: UICollectionView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
         setupConstraints()
         setupButtonActions()
+        reloadCollectionView()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -46,6 +39,11 @@ final class LogViewController: UIViewController {
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         navigationController?.setNavigationBarHidden(false, animated: animated)
+    }
+    
+    func addNewEmotion(title: String, emotionColor: EmotionColor) {
+        viewModel.addNewEmotionCard(emotion: title, emotionColor: emotionColor)
+        reloadCollectionView()
     }
 }
 
@@ -60,7 +58,7 @@ private extension LogViewController {
         configureLogNavBar()
         configureLogTitleLabel()
         configureActivityRing()
-        configureCardStackView()
+        configureCollectionView()
     }
     
     func configureScrollView() {
@@ -84,9 +82,20 @@ private extension LogViewController {
         activityRing = ActivityRingView(frame: frame, ring: ActivityRing(color: .ringEmpty, gradientColor: .ringDefault, progress: 0.5))
     }
     
-    func configureCardStackView() {
-        cardStackView.axis = .vertical
-        cardStackView.spacing = Metrics.cardStackViewSpacing
+    func configureCollectionView() {
+        let layout = UICollectionViewFlowLayout()
+        layout.scrollDirection = .vertical
+        layout.minimumLineSpacing = Metrics.collectionViewItemSpacing
+        layout.minimumInteritemSpacing = 0
+        
+        collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        collectionView.backgroundColor = .clear
+        collectionView.showsVerticalScrollIndicator = false
+        collectionView.isScrollEnabled = false
+        
+        collectionView.register(EmotionCardCell.self, forCellWithReuseIdentifier: EmotionCardCell.reuseIdentifier)
+        collectionView.dataSource = self
+        collectionView.delegate = self
     }
     
     func setupConstraints() {
@@ -95,9 +104,7 @@ private extension LogViewController {
         contentView.addSubview(logNavBar)
         contentView.addSubview(logTitleLabel)
         contentView.addSubview(activityRingView)
-        contentView.addSubview(cardStackView)
-        cardStackView.addArrangedSubview(firstEmotionCard)
-        cardStackView.addArrangedSubview(secondEmotionCard)
+        contentView.addSubview(collectionView)
         
         scrollView.snp.makeConstraints { make in
             make.top.equalTo(view.safeAreaLayoutGuide.snp.top)
@@ -137,9 +144,10 @@ private extension LogViewController {
             make.center.equalToSuperview()
         }
         
-        cardStackView.snp.makeConstraints { make in
-            make.horizontalEdges.equalToSuperview().inset(Metrics.horizontalEdgesInset)
+        collectionView.snp.makeConstraints { make in
             make.top.equalTo(activityRingView.snp.bottom).offset(Metrics.topEdgeOffset)
+            make.leading.trailing.equalToSuperview().inset(Metrics.horizontalEdgesInset)
+            make.height.equalTo(0)
             make.bottom.equalToSuperview().inset(Metrics.bottomEdgeInset)
         }
     }
@@ -149,8 +157,10 @@ private extension LogViewController {
 
 private extension LogViewController {
     
-    @objc func handleEmotionCardTapped() {
-        coordinator?.handleEmotionCardTapped()
+    @objc func handleEmotionCardTapped(at index: Int) {
+        if let emotionData = viewModel.getEmotionData(at: index) {
+            coordinator?.handleEmotionCardTapped(with: emotionData)
+        }
     }
     
     @objc func handleAddNoteButtonTapped() {
@@ -158,17 +168,70 @@ private extension LogViewController {
     }
     
     func setupButtonActions() {
-        firstEmotionCard.onTap = {
-            self.handleEmotionCardTapped()
+        addNoteButton.onButtonTapped = { [weak self] in
+            self?.handleAddNoteButtonTapped()
+        }
+    }
+}
+
+// MARK: - Collection View Height Update
+
+private extension LogViewController {
+    func updateCollectionViewHeight() {
+        collectionView.layoutIfNeeded()
+        collectionView.collectionViewLayout.invalidateLayout()
+        
+        let contentHeight = collectionView.collectionViewLayout.collectionViewContentSize.height
+        
+        collectionView.snp.updateConstraints { make in
+            make.height.equalTo(contentHeight)
+        }
+    }
+    
+    func reloadCollectionView() {
+        collectionView.reloadData()
+        
+        UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseInOut, animations: {
+            self.updateCollectionViewHeight()
+            self.view.layoutIfNeeded()
+        }, completion: { _ in
+            let lastItemIndex = self.viewModel.emotionCards.count - 1
+            guard lastItemIndex >= 0 else { return }
+            let lastIndexPath = IndexPath(item: lastItemIndex, section: 0)
+            self.collectionView.scrollToItem(at: lastIndexPath, at: .bottom, animated: true)
+        })
+    }
+}
+
+// MARK: - UICollectionViewDataSource
+
+extension LogViewController: UICollectionViewDataSource {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return viewModel.emotionCards.count
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: EmotionCardCell.reuseIdentifier, for: indexPath) as? EmotionCardCell else {
+            return UICollectionViewCell()
         }
         
-        secondEmotionCard.onTap = {
-            self.handleEmotionCardTapped()
+        let cardInfo = viewModel.emotionCards[indexPath.item]
+        cell.configure(time: cardInfo.time, emotion: cardInfo.emotion, emotionColor: cardInfo.emotionColor, icon: cardInfo.icon)
+        cell.onTap = { [weak self] in
+            self?.handleEmotionCardTapped(at: indexPath.item)
         }
-        
-        addNoteButton.onButtonTapped = {
-            self.handleAddNoteButtonTapped()
-        }
+        return cell
+    }
+}
+
+// MARK: - UICollectionViewDelegateFlowLayout
+
+extension LogViewController: UICollectionViewDelegateFlowLayout {
+    func collectionView(_ collectionView: UICollectionView,
+                        layout collectionViewLayout: UICollectionViewLayout,
+                        sizeForItemAt indexPath: IndexPath) -> CGSize {
+        let width = collectionView.bounds.width
+        return CGSize(width: width, height: 158)
     }
 }
 
@@ -181,6 +244,8 @@ private extension LogViewController {
         static let horizontalEdgesInset: CGFloat = 24
         static let topEdgeOffset: CGFloat = 32
         static let bottomEdgeInset: CGFloat = 32
+        static let collectionViewItemSpacing: CGFloat = 8
+        static let cellHeight: CGFloat = 158
     }
     
     enum Constants {
