@@ -10,7 +10,7 @@ import UIKit
 class TagCollectionView: UICollectionView, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
     let sections = ["Чем вы занимались?", "С кем вы были?", "Где вы были?"]
-    let items = [
+    var items = [
         ["Приём пищи", "Встреча с друзьями", "Тренировка", "Хобби", "Отдых", "Поездка", "+"],
         ["Один", "Друзья", "Семья", "Коллеги", "Партнёр", "Питомцы", "+"],
         ["Дом", "Работа", "Школа", "Транспорт", "Улица", "+"]
@@ -18,6 +18,9 @@ class TagCollectionView: UICollectionView, UICollectionViewDelegate, UICollectio
     
     var selectedTags: Set<String> = []
     var onTagSelected: ((String) -> Void)?
+    
+    private var editingIndexPath: IndexPath?
+    private var customTags: [[String]] = [[], [], []]
     
     init() {
         let layout = LeftAlignedCollectionViewFlowLayout()
@@ -57,6 +60,12 @@ class TagCollectionView: UICollectionView, UICollectionViewDelegate, UICollectio
         
         if item == Constants.plusString {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "AddTagCell", for: indexPath) as! AddTagCell
+            cell.onTap = { [weak self] in
+                cell.startEditing()
+            }
+            cell.onTagAdded = { [weak self] newTag in
+                self?.handleNewTag(newTag, inSection: indexPath.section)
+            }
             return cell
         } else {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "TagCell", for: indexPath) as! TagCell
@@ -96,6 +105,23 @@ class TagCollectionView: UICollectionView, UICollectionViewDelegate, UICollectio
     func updateSelectedTags(_ tags: Set<String>) {
         selectedTags = tags
         reloadData()
+    }
+    
+    private func handleNewTag(_ tag: String, inSection section: Int) {
+        var sectionItems = items[section]
+        let plusIndex = sectionItems.firstIndex(of: "+")!
+        sectionItems.insert(tag, at: plusIndex)
+        items[section] = sectionItems
+        
+        UIView.animate(withDuration: 0.3) {
+            self.reloadSection(section)
+        }
+    }
+    
+    private func reloadSection(_ section: Int) {
+        reloadSections(IndexSet(integer: section))
+        invalidateIntrinsicContentSize()
+        superview?.layoutIfNeeded()
     }
 }
 
