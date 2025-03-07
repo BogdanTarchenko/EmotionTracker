@@ -27,7 +27,10 @@ class TagCell: UICollectionViewCell {
     
     func configure(with text: String, isSelected: Bool = false) {
         label.text = text
-        contentView.backgroundColor = isSelected ? Constants.activeTagColor : Constants.tagColor
+        
+        UIView.animate(withDuration: 0.3) {
+            self.contentView.backgroundColor = isSelected ? Constants.activeTagColor : Constants.tagColor
+        }
     }
 }
 
@@ -66,12 +69,12 @@ private extension TagCell {
 
 private extension TagCell {
     @objc private func handleTap() {
-        onTap?()
+        // тактильные отклики, прикольная тема
+        let generator = UIImpactFeedbackGenerator(style: .light)
+        generator.prepare()
+        generator.impactOccurred()
         
-        UIView.animate(withDuration: 0.2, delay: 0, options: .curveEaseInOut, animations: {
-            let isActive = self.contentView.backgroundColor == Constants.tagColor
-            self.contentView.backgroundColor = isActive ? Constants.activeTagColor : Constants.tagColor
-        })
+        onTap?()
     }
     
 }

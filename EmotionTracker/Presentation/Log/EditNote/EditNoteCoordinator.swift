@@ -35,13 +35,15 @@ final class EditNoteCoordinator: Coordinator {
         navigationController.pushViewController(editNoteViewController, animated: true)
     }
     
-    func start(with emotionData: (index: Int, title: String, color: UIColor, time: String, selectedTags: Set<String>)) {
+    func start(with emotionData: (index: Int, title: String, color: UIColor, time: String, selectedTags: Set<String>, tagsBySection: [[(tag: String, index: Int)]], selectedSectionTags: Set<EditNoteViewModel.SectionTag>)) {
         viewModel = EditNoteViewModel(
             index: emotionData.index,
             emotionTitle: emotionData.title,
             emotionColor: emotionData.color,
             time: emotionData.time,
-            selectedTags: emotionData.selectedTags
+            selectedTags: emotionData.selectedTags,
+            tagsBySection: emotionData.tagsBySection,
+            selectedSectionTags: emotionData.selectedSectionTags
         )
         let editNoteViewController = EditNoteViewController()
         editNoteViewController.viewModel = viewModel
@@ -66,7 +68,9 @@ final class EditNoteCoordinator: Coordinator {
                     logCoordinator.handleSaveNewEmotion(
                         title: viewModel.emotionTitle,
                         color: viewModel.emotionColor,
-                        selectedTags: viewModel.selectedTags
+                        selectedTags: viewModel.selectedTags,
+                        tagsBySection: viewModel.tagsBySection,
+                        selectedSectionTags: viewModel.selectedSectionTags
                     )
                 }
             }
@@ -77,7 +81,9 @@ final class EditNoteCoordinator: Coordinator {
                     index: index,
                     title: viewModel.emotionTitle,
                     color: viewModel.emotionColor,
-                    selectedTags: viewModel.selectedTags
+                    selectedTags: viewModel.selectedTags,
+                    tagsBySection: viewModel.tagsBySection,
+                    selectedSectionTags: viewModel.selectedSectionTags
                 )
             }
         }

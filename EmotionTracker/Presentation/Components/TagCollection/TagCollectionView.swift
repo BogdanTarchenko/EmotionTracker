@@ -10,17 +10,13 @@ import UIKit
 class TagCollectionView: UICollectionView, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
     let sections = ["Чем вы занимались?", "С кем вы были?", "Где вы были?"]
-    var items = [
-        ["Приём пищи", "Встреча с друзьями", "Тренировка", "Хобби", "Отдых", "Поездка", "+"],
-        ["Один", "Друзья", "Семья", "Коллеги", "Партнёр", "Питомцы", "+"],
-        ["Дом", "Работа", "Школа", "Транспорт", "Улица", "+"]
-    ]
+    private var viewModel: EditNoteViewModel?
     
     var selectedTags: Set<String> = []
-    var onTagSelected: ((String) -> Void)?
+    var onTagSelected: ((String, Int) -> Void)?
+    var onTagAdded: ((String, Int) -> Bool)?
     
     private var editingIndexPath: IndexPath?
-    private var customTags: [[String]] = [[], [], []]
     
     init() {
         let layout = LeftAlignedCollectionViewFlowLayout()
@@ -42,6 +38,11 @@ class TagCollectionView: UICollectionView, UICollectionViewDelegate, UICollectio
         fatalError("init(coder:) has not been implemented")
     }
     
+    func configure(with viewModel: EditNoteViewModel) {
+        self.viewModel = viewModel
+        reloadData()
+    }
+    
     override var intrinsicContentSize: CGSize {
         self.layoutIfNeeded()
         return CGSize(width: UIView.noIntrinsicMetric, height: self.contentSize.height)
@@ -52,13 +53,13 @@ class TagCollectionView: UICollectionView, UICollectionViewDelegate, UICollectio
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return items[section].count
+        return (viewModel?.getTagsForSection(section).count ?? 0) + 1
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let item = items[indexPath.section][indexPath.row]
+        let tagsInSection = viewModel?.getTagsForSection(indexPath.section) ?? []
         
-        if item == Constants.plusString {
+        if indexPath.row == tagsInSection.count {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "AddTagCell", for: indexPath) as! AddTagCell
             cell.onTap = { [weak self] in
                 cell.startEditing()
@@ -68,10 +69,18 @@ class TagCollectionView: UICollectionView, UICollectionViewDelegate, UICollectio
             }
             return cell
         } else {
+            let tag = tagsInSection[indexPath.row]
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "TagCell", for: indexPath) as! TagCell
-            cell.configure(with: item, isSelected: selectedTags.contains(item))
+            
+            let isSelected = viewModel?.isTagSelected(tag, section: indexPath.section) ?? false
+            cell.configure(with: tag, isSelected: isSelected)
+            
             cell.onTap = { [weak self] in
-                self?.onTagSelected?(item)
+                guard let self = self, let viewModel = self.viewModel else { return }
+                
+                self.onTagSelected?(tag, indexPath.section)
+                
+                cell.configure(with: tag, isSelected: viewModel.isTagSelected(tag, section: indexPath.section))
             }
             return cell
         }
@@ -108,14 +117,37 @@ class TagCollectionView: UICollectionView, UICollectionViewDelegate, UICollectio
     }
     
     private func handleNewTag(_ tag: String, inSection section: Int) {
-        var sectionItems = items[section]
-        let plusIndex = sectionItems.firstIndex(of: "+")!
-        sectionItems.insert(tag, at: plusIndex)
-        items[section] = sectionItems
-        
-        UIView.animate(withDuration: 0.3) {
-            self.reloadSection(section)
+        if let success = onTagAdded?(tag, section), success {
+            UIView.animate(withDuration: 0.3) {
+                self.reloadSection(section)
+            }
+        } else {
+            showDuplicateTagAlert()
         }
+    }
+    
+    private func showDuplicateTagAlert() {
+        guard let viewController = self.findViewController() else { return }
+        
+        let alert = UIAlertController(
+            title: "Ошибка",
+            message: "Этот тег уже существует в данной секции",
+            preferredStyle: .alert
+        )
+        
+        alert.addAction(UIAlertAction(title: "OK", style: .default))
+        viewController.present(alert, animated: true)
+    }
+    
+    private func findViewController() -> UIViewController? {
+        var responder: UIResponder? = self
+        while let nextResponder = responder?.next {
+            if let viewController = nextResponder as? UIViewController {
+                return viewController
+            }
+            responder = nextResponder
+        }
+        return nil
     }
     
     private func reloadSection(_ section: Int) {

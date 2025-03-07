@@ -19,7 +19,7 @@ final class WelcomeCoordinator: Coordinator {
     func start() {
         let welcomeViewController = WelcomeViewController()
         welcomeViewController.coordinator = self
-        navigationController.setViewControllers([welcomeViewController], animated: true)
+        navigationController.setViewControllers([welcomeViewController], animated: false)
     }
     
     func handleAppleIDAuthentication() {

@@ -39,7 +39,7 @@ final class TabBarCoordinator: Coordinator {
         
         setupTabBarItems(for: tabBarController, logCoordinator: logCoordinator, statisticsCoordinator: statisticsCoordinator, settingsCoordinator: settingsCoordinator)
         
-        navigationController.setViewControllers([tabBarController], animated: true)
+        navigationController.setViewControllers([tabBarController], animated: false)
     }
     
     private func setupTabBarItems(for tabBarController: TabBarViewController, logCoordinator: LogCoordinator, statisticsCoordinator: StatisticsCoordinator, settingsCoordinator: SettingsCoordinator) {

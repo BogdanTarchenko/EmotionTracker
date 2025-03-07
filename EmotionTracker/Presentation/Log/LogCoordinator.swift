@@ -22,10 +22,10 @@ final class LogCoordinator: Coordinator {
         let logViewController = LogViewController()
         logViewController.coordinator = self
         self.logViewController = logViewController
-        navigationController.setViewControllers([logViewController], animated: true)
+        navigationController.setViewControllers([logViewController], animated: false)
     }
     
-    func handleEmotionCardTapped(with emotionData: (index: Int, title: String, color: UIColor, time: String, selectedTags: Set<String>)) {
+    func handleEmotionCardTapped(with emotionData: (index: Int, title: String, color: UIColor, time: String, selectedTags: Set<String>, tagsBySection: [[(tag: String, index: Int)]], selectedSectionTags: Set<EditNoteViewModel.SectionTag>)) {
         showEditNote(with: emotionData)
     }
     
@@ -33,24 +33,32 @@ final class LogCoordinator: Coordinator {
         showAddNote()
     }
     
-    func handleSaveNewEmotion(title: String, color: UIColor, selectedTags: Set<String>) {
+    func handleSaveNewEmotion(title: String, color: UIColor, selectedTags: Set<String>, tagsBySection: [[(tag: String, index: Int)]] = [[], [], []], selectedSectionTags: Set<EditNoteViewModel.SectionTag> = []) {
         if let emotionColor = EmotionColor.from(uiColor: color) {
-            logViewController?.addNewEmotion(title: title, emotionColor: emotionColor, selectedTags: selectedTags)
+            logViewController?.addNewEmotion(
+                title: title, 
+                emotionColor: emotionColor, 
+                selectedTags: selectedTags,
+                tagsBySection: tagsBySection,
+                selectedSectionTags: selectedSectionTags
+            )
         }
     }
     
-    func handleUpdateEmotion(index: Int, title: String, color: UIColor, selectedTags: Set<String>) {
+    func handleUpdateEmotion(index: Int, title: String, color: UIColor, selectedTags: Set<String>, tagsBySection: [[(tag: String, index: Int)]], selectedSectionTags: Set<EditNoteViewModel.SectionTag> = []) {
         if let emotionColor = EmotionColor.from(uiColor: color) {
             logViewController?.updateEmotion(
                 index: index,
                 title: title,
                 emotionColor: emotionColor,
-                selectedTags: selectedTags
+                selectedTags: selectedTags,
+                tagsBySection: tagsBySection,
+                selectedSectionTags: selectedSectionTags
             )
         }
     }
     
-    private func showEditNote(with emotionData: (index: Int, title: String, color: UIColor, time: String, selectedTags: Set<String>)) {
+    private func showEditNote(with emotionData: (index: Int, title: String, color: UIColor, time: String, selectedTags: Set<String>, tagsBySection: [[(tag: String, index: Int)]], selectedSectionTags: Set<EditNoteViewModel.SectionTag>)) {
         let editNoteCoordinator = EditNoteCoordinator(navigationController: navigationController)
         editNoteCoordinator.parentCoordinator = self
         childCoordinators.append(editNoteCoordinator)

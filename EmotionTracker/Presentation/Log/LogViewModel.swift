@@ -10,7 +10,7 @@ import UIKit
 final class LogViewModel {
     var emotionCards: [EmotionCardViewModel] = []
     
-    func getEmotionData(at index: Int) -> (index: Int, title: String, color: UIColor, time: String, selectedTags: Set<String>)? {
+    func getEmotionData(at index: Int) -> (index: Int, title: String, color: UIColor, time: String, selectedTags: Set<String>, tagsBySection: [[(tag: String, index: Int)]], selectedSectionTags: Set<EditNoteViewModel.SectionTag>)? {
         guard index < emotionCards.count else { return nil }
         let card = emotionCards[index]
         return (
@@ -18,22 +18,29 @@ final class LogViewModel {
             title: card.emotion,
             color: card.emotionColor.toUIColor(),
             time: card.time,
-            selectedTags: card.selectedTags
+            selectedTags: card.selectedTags,
+            tagsBySection: card.tagsBySection,
+            selectedSectionTags: card.selectedSectionTags
         )
     }
     
-    func addNewEmotionCard(emotion: String, emotionColor: EmotionColor, selectedTags: Set<String>) {
+    func addNewEmotionCard(emotion: String, emotionColor: EmotionColor, selectedTags: Set<String>, tagsBySection: [[(tag: String, index: Int)]] = [[], [], []], selectedSectionTags: Set<EditNoteViewModel.SectionTag> = []) {
         let newCard = EmotionCardViewModel(
             time: Date().formattedRelativeTime(),
             emotion: emotion,
             emotionColor: emotionColor,
             icon: UIImage(named: "TestEmotionImg"),
-            selectedTags: selectedTags
+            selectedTags: selectedTags,
+            tagsBySection: tagsBySection,
+            selectedSectionTags: selectedSectionTags
         )
         emotionCards.append(newCard)
     }
     
-    func updateEmotionCard(at index: Int, title: String, color: EmotionColor, selectedTags: Set<String>) {
+    func updateEmotionCard(at index: Int, title: String, color: EmotionColor, 
+                          selectedTags: Set<String>, 
+                          tagsBySection: [[(tag: String, index: Int)]] = [[], [], []], 
+                          selectedSectionTags: Set<EditNoteViewModel.SectionTag> = []) {
         guard index < emotionCards.count else { return }
         let currentCard = emotionCards[index]
         let updatedCard = EmotionCardViewModel(
@@ -41,7 +48,9 @@ final class LogViewModel {
             emotion: title,
             emotionColor: color,
             icon: currentCard.icon,
-            selectedTags: selectedTags
+            selectedTags: selectedTags,
+            tagsBySection: tagsBySection,
+            selectedSectionTags: selectedSectionTags
         )
         emotionCards[index] = updatedCard
     }
@@ -49,8 +58,4 @@ final class LogViewModel {
     func findCardIndex(withTime time: String) -> Int? {
         return emotionCards.firstIndex { $0.time == time }
     }
-    
-    init() {
-    }
 }
-

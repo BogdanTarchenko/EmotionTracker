@@ -19,6 +19,6 @@ final class SettingsCoordinator: Coordinator {
     func start() {
         let settingsViewController = SettingsViewController()
         settingsViewController.coordinator = self
-        navigationController.setViewControllers([settingsViewController], animated: true)
+        navigationController.setViewControllers([settingsViewController], animated: false)
     }
 }
