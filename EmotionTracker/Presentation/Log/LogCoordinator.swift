@@ -25,7 +25,7 @@ final class LogCoordinator: Coordinator {
         navigationController.setViewControllers([logViewController], animated: true)
     }
     
-    func handleEmotionCardTapped(with emotionData: (title: String, color: UIColor, time: String)) {
+    func handleEmotionCardTapped(with emotionData: (index: Int, title: String, color: UIColor, time: String, selectedTags: Set<String>)) {
         showEditNote(with: emotionData)
     }
     
@@ -33,13 +33,24 @@ final class LogCoordinator: Coordinator {
         showAddNote()
     }
     
-    func handleSaveNewEmotion(title: String, color: UIColor) {
+    func handleSaveNewEmotion(title: String, color: UIColor, selectedTags: Set<String>) {
         if let emotionColor = EmotionColor.from(uiColor: color) {
-            logViewController?.addNewEmotion(title: title, emotionColor: emotionColor)
+            logViewController?.addNewEmotion(title: title, emotionColor: emotionColor, selectedTags: selectedTags)
         }
     }
     
-    private func showEditNote(with emotionData: (title: String, color: UIColor, time: String)) {
+    func handleUpdateEmotion(index: Int, title: String, color: UIColor, selectedTags: Set<String>) {
+        if let emotionColor = EmotionColor.from(uiColor: color) {
+            logViewController?.updateEmotion(
+                index: index,
+                title: title,
+                emotionColor: emotionColor,
+                selectedTags: selectedTags
+            )
+        }
+    }
+    
+    private func showEditNote(with emotionData: (index: Int, title: String, color: UIColor, time: String, selectedTags: Set<String>)) {
         let editNoteCoordinator = EditNoteCoordinator(navigationController: navigationController)
         editNoteCoordinator.parentCoordinator = self
         childCoordinators.append(editNoteCoordinator)

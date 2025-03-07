@@ -10,31 +10,47 @@ import UIKit
 final class LogViewModel {
     var emotionCards: [EmotionCardViewModel] = []
     
-    func getEmotionData(at index: Int) -> (title: String, color: UIColor, time: String)? {
+    func getEmotionData(at index: Int) -> (index: Int, title: String, color: UIColor, time: String, selectedTags: Set<String>)? {
         guard index < emotionCards.count else { return nil }
         let card = emotionCards[index]
         return (
+            index: index,
             title: card.emotion,
             color: card.emotionColor.toUIColor(),
-            time: card.time
+            time: card.time,
+            selectedTags: card.selectedTags
         )
     }
     
-    func addNewEmotionCard(emotion: String, emotionColor: EmotionColor) {
+    func addNewEmotionCard(emotion: String, emotionColor: EmotionColor, selectedTags: Set<String>) {
         let newCard = EmotionCardViewModel(
             time: Date().formattedRelativeTime(),
             emotion: emotion,
             emotionColor: emotionColor,
-            icon: UIImage(named: "TestEmotionImg")
+            icon: UIImage(named: "TestEmotionImg"),
+            selectedTags: selectedTags
         )
         emotionCards.append(newCard)
     }
     
+    func updateEmotionCard(at index: Int, title: String, color: EmotionColor, selectedTags: Set<String>) {
+        guard index < emotionCards.count else { return }
+        let currentCard = emotionCards[index]
+        let updatedCard = EmotionCardViewModel(
+            time: currentCard.time,
+            emotion: title,
+            emotionColor: color,
+            icon: currentCard.icon,
+            selectedTags: selectedTags
+        )
+        emotionCards[index] = updatedCard
+    }
+    
+    func findCardIndex(withTime time: String) -> Int? {
+        return emotionCards.firstIndex { $0.time == time }
+    }
+    
     init() {
-        emotionCards = [
-            EmotionCardViewModel(time: "вчера, 23:40", emotion: "выгорание", emotionColor: .blue, icon: UIImage(named: "TestEmotionImg")),
-            EmotionCardViewModel(time: "вчера, 23:40", emotion: "выгорание", emotionColor: .green, icon: UIImage(named: "TestEmotionImg"))
-        ]
     }
 }
 

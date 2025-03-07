@@ -16,6 +16,9 @@ class TagCollectionView: UICollectionView, UICollectionViewDelegate, UICollectio
         ["Дом", "Работа", "Школа", "Транспорт", "Улица", "+"]
     ]
     
+    var selectedTags: Set<String> = []
+    var onTagSelected: ((String) -> Void)?
+    
     init() {
         let layout = LeftAlignedCollectionViewFlowLayout()
         layout.minimumInteritemSpacing = Metrics.spacing
@@ -57,7 +60,10 @@ class TagCollectionView: UICollectionView, UICollectionViewDelegate, UICollectio
             return cell
         } else {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "TagCell", for: indexPath) as! TagCell
-            cell.configure(with: item)
+            cell.configure(with: item, isSelected: selectedTags.contains(item))
+            cell.onTap = { [weak self] in
+                self?.onTagSelected?(item)
+            }
             return cell
         }
     }
@@ -85,6 +91,11 @@ class TagCollectionView: UICollectionView, UICollectionViewDelegate, UICollectio
             self.invalidateIntrinsicContentSize()
             self.superview?.layoutIfNeeded()
         }
+    }
+    
+    func updateSelectedTags(_ tags: Set<String>) {
+        selectedTags = tags
+        reloadData()
     }
 }
 

@@ -24,19 +24,24 @@ final class EditNoteCoordinator: Coordinator {
         navigationController.pushViewController(editNoteViewController, animated: true)
     }
     
-    func start(with selectedEmotion: (title: String, color: UIColor)) {
-        viewModel = EditNoteViewModel(emotionTitle: selectedEmotion.title, emotionColor: selectedEmotion.color)
+    func start(with emotion: (title: String, color: UIColor)) {
+        viewModel = EditNoteViewModel(
+            emotionTitle: emotion.title,
+            emotionColor: emotion.color
+        )
         let editNoteViewController = EditNoteViewController()
         editNoteViewController.viewModel = viewModel
         editNoteViewController.coordinator = self
         navigationController.pushViewController(editNoteViewController, animated: true)
     }
     
-    func start(with emotionData: (title: String, color: UIColor, time: String)) {
+    func start(with emotionData: (index: Int, title: String, color: UIColor, time: String, selectedTags: Set<String>)) {
         viewModel = EditNoteViewModel(
+            index: emotionData.index,
             emotionTitle: emotionData.title,
             emotionColor: emotionData.color,
-            time: emotionData.time
+            time: emotionData.time,
+            selectedTags: emotionData.selectedTags
         )
         let editNoteViewController = EditNoteViewController()
         editNoteViewController.viewModel = viewModel
@@ -60,11 +65,21 @@ final class EditNoteCoordinator: Coordinator {
                 if let emotionColor = EmotionColor.from(uiColor: viewModel.emotionColor) {
                     logCoordinator.handleSaveNewEmotion(
                         title: viewModel.emotionTitle,
-                        color: viewModel.emotionColor
+                        color: viewModel.emotionColor,
+                        selectedTags: viewModel.selectedTags
                     )
                 }
             }
             addNoteCoordinator.finish()
+        } else if let logCoordinator = parentCoordinator as? LogCoordinator {
+            if let index = viewModel.index {
+                logCoordinator.handleUpdateEmotion(
+                    index: index,
+                    title: viewModel.emotionTitle,
+                    color: viewModel.emotionColor,
+                    selectedTags: viewModel.selectedTags
+                )
+            }
         }
         
         parentCoordinator?.childCoordinators.removeAll { $0 === self }

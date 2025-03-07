@@ -41,8 +41,13 @@ final class LogViewController: UIViewController {
         navigationController?.setNavigationBarHidden(false, animated: animated)
     }
     
-    func addNewEmotion(title: String, emotionColor: EmotionColor) {
-        viewModel.addNewEmotionCard(emotion: title, emotionColor: emotionColor)
+    func addNewEmotion(title: String, emotionColor: EmotionColor, selectedTags: Set<String>) {
+        viewModel.addNewEmotionCard(emotion: title, emotionColor: emotionColor, selectedTags: selectedTags)
+        reloadCollectionView()
+    }
+    
+    func updateEmotion(index: Int, title: String, emotionColor: EmotionColor, selectedTags: Set<String>) {
+        viewModel.updateEmotionCard(at: index, title: title, color: emotionColor, selectedTags: selectedTags)
         reloadCollectionView()
     }
 }

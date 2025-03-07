@@ -84,6 +84,10 @@ private extension EditNoteViewController {
     
     func configureTagCollectionView() {
         tagCollectionView.translatesAutoresizingMaskIntoConstraints = false
+        tagCollectionView.selectedTags = viewModel.selectedTags
+        tagCollectionView.onTagSelected = { [weak self] tag in
+            self?.viewModel.toggleTag(tag)
+        }
     }
     
     func setupConstraints() {

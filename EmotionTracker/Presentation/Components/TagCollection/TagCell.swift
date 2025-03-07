@@ -25,8 +25,9 @@ class TagCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func configure(with text: String) {
+    func configure(with text: String, isSelected: Bool = false) {
         label.text = text
+        contentView.backgroundColor = isSelected ? Constants.activeTagColor : Constants.tagColor
     }
 }
 
@@ -65,14 +66,12 @@ private extension TagCell {
 
 private extension TagCell {
     @objc private func handleTap() {
-        let isActive = contentView.backgroundColor == Constants.tagColor
-        let newColor = isActive ? Constants.activeTagColor : Constants.tagColor
+        onTap?()
         
         UIView.animate(withDuration: 0.2, delay: 0, options: .curveEaseInOut, animations: {
-            self.contentView.backgroundColor = newColor
+            let isActive = self.contentView.backgroundColor == Constants.tagColor
+            self.contentView.backgroundColor = isActive ? Constants.activeTagColor : Constants.tagColor
         })
-        
-        onTap?()
     }
     
 }
@@ -91,4 +90,3 @@ private extension TagCell {
         static let labelFont: UIFont = UIFont(name: "VelaSans-Regular", size: 14)!
     }
 }
-
