@@ -11,11 +11,11 @@ final class TabBarCoordinator: Coordinator {
     var navigationController: UINavigationController
     var parentCoordinator: Coordinator?
     var childCoordinators: [Coordinator] = []
-    
+
     init(navigationController: UINavigationController) {
         self.navigationController = navigationController
     }
-    
+
     func start() {
         let tabBarController = TabBarViewController()
         

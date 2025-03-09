@@ -87,6 +87,12 @@
         }
       }
     },
+    "duplicatedTagsAlert_message" : {
+      "comment" : "Duplicated tags alert message"
+    },
+    "duplicatedTagsAlert_title" : {
+      "comment" : "Duplicated tags alert title"
+    },
     "editNoteNavigation_title" : {
       "comment" : "EditNote screen navigation title",
       "localizations" : {
@@ -297,7 +303,15 @@
       }
     },
     "today_string" : {
-      "comment" : "Today string"
+      "comment" : "Today string",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "сегодня"
+          }
+        }
+      }
     },
     "welcome_title" : {
       "comment" : "Welcome screen title",
@@ -311,7 +325,15 @@
       }
     },
     "yesterday_string" : {
-      "comment" : "Yesterday string"
+      "comment" : "Yesterday string",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "вчера"
+          }
+        }
+      }
     }
   },
   "version" : "1.0"

@@ -270,7 +270,7 @@ extension LogViewModel {
     
     func getTodayEmotionsForRing() -> [(color: UIColor, percentage: CGFloat)] {
         let todayCards = getTodayCards()
-        let totalCount = CGFloat(todayCards.count)
+        let goal = CGFloat(dailyGoal)
         
         var colorCounts: [EmotionColor: Int] = [:]
         
@@ -279,7 +279,7 @@ extension LogViewModel {
         }
         
         return colorCounts.map { color, count in
-            (color: color.toUIColor(), percentage: CGFloat(count) / totalCount)
+            (color: color.toUIColor(), percentage: CGFloat(count) / goal)
         }
     }
 }
