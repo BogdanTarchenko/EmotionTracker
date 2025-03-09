@@ -23,6 +23,15 @@
         }
       }
     },
+    "alert_log_cancel" : {
+      "comment" : "Log screen alert cancel"
+    },
+    "alert_log_message" : {
+      "comment" : "Log screen alert message"
+    },
+    "alert_log_title" : {
+      "comment" : "Log screen alert title"
+    },
     "alert_title" : {
       "comment" : "Alert settings switcher title",
       "localizations" : {
@@ -287,6 +296,9 @@
         }
       }
     },
+    "today_string" : {
+      "comment" : "Today string"
+    },
     "welcome_title" : {
       "comment" : "Welcome screen title",
       "localizations" : {
@@ -297,6 +309,9 @@
           }
         }
       }
+    },
+    "yesterday_string" : {
+      "comment" : "Yesterday string"
     }
   },
   "version" : "1.0"

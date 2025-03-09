@@ -32,16 +32,12 @@ final class EditNoteViewModel {
         }
     }
     
-    private let defaultTags = [
-        ["Приём пищи", "Встреча с друзьями", "Тренировка", "Хобби", "Отдых", "Поездка"],
-        ["Один", "Друзья", "Семья", "Коллеги", "Партнёр", "Питомцы"],
-        ["Дом", "Работа", "Школа", "Транспорт", "Улица"]
-    ]
+    private let defaultTags = Constants.defaultTags
     
-    init(index: Int? = nil, 
-         emotionTitle: String, 
-         emotionColor: UIColor, 
-         time: String? = nil, 
+    init(index: Int? = nil,
+         emotionTitle: String,
+         emotionColor: UIColor,
+         time: String? = nil,
          selectedTags: Set<String> = [],
          tagsBySection: [[(tag: String, index: Int)]] = [],
          selectedSectionTags: Set<SectionTag> = []) {
@@ -67,27 +63,28 @@ final class EditNoteViewModel {
             initializeDefaultTags()
         }
     }
-    
-    private func initializeDefaultTags(startFrom: Int = 0) {
-        for sectionIndex in startFrom..<defaultTags.count {
-            for (tagIndex, tag) in defaultTags[sectionIndex].enumerated() {
-                tagsBySection[sectionIndex].append((tag: tag, index: tagIndex))
-            }
+}
+
+extension EditNoteViewModel {
+    func getEmotionIcon(for color: UIColor) -> UIImage? {
+        guard let emotionColor = EmotionColor.from(uiColor: color) else {
+            return nil
         }
-    }
-    
-    func toggleTag(_ tag: String, section: Int) {
-        let sectionTag = SectionTag(section: section, tag: tag)
         
-        if selectedSectionTags.contains(sectionTag) {
-            selectedSectionTags.remove(sectionTag)
-        } else {
-            selectedSectionTags.insert(sectionTag)
+        switch emotionColor {
+        case .blue:
+            return Constants.blueIconImg
+        case .green:
+            return Constants.greenIconImg
+        case .yellow:
+            return Constants.yellowIconImg
+        case .red:
+            return Constants.redIconImg
         }
     }
     
-    func isTagSelected(_ tag: String, section: Int) -> Bool {
-        return selectedSectionTags.contains(SectionTag(section: section, tag: tag))
+    func getTagsForSection(_ section: Int) -> [String] {
+        return tagsBySection[section].sorted { $0.index < $1.index }.map { $0.tag }
     }
     
     func addTag(_ tag: String, section: Int) -> Bool {
@@ -102,11 +99,46 @@ final class EditNoteViewModel {
         return true
     }
     
-    private func tagExists(_ tag: String, inSection section: Int) -> Bool {
-        return tagsBySection[section].contains { $0.tag == tag }
+    func isTagSelected(_ tag: String, section: Int) -> Bool {
+        return selectedSectionTags.contains(SectionTag(section: section, tag: tag))
     }
     
-    func getTagsForSection(_ section: Int) -> [String] {
-        return tagsBySection[section].sorted { $0.index < $1.index }.map { $0.tag }
+    func toggleTag(_ tag: String, section: Int) {
+        let sectionTag = SectionTag(section: section, tag: tag)
+        
+        if selectedSectionTags.contains(sectionTag) {
+            selectedSectionTags.remove(sectionTag)
+        } else {
+            selectedSectionTags.insert(sectionTag)
+        }
+    }
+}
+
+private extension EditNoteViewModel {
+    func initializeDefaultTags(startFrom: Int = 0) {
+        for sectionIndex in startFrom..<defaultTags.count {
+            for (tagIndex, tag) in defaultTags[sectionIndex].enumerated() {
+                tagsBySection[sectionIndex].append((tag: tag, index: tagIndex))
+            }
+        }
+    }
+    
+    func tagExists(_ tag: String, inSection section: Int) -> Bool {
+        return tagsBySection[section].contains { $0.tag == tag }
+    }
+}
+
+private extension EditNoteViewModel {
+    enum Constants {
+        static var defaultTags: [[String]] = [
+            ["Приём пищи", "Встреча с друзьями", "Тренировка", "Хобби", "Отдых", "Поездка"],
+            ["Один", "Друзья", "Семья", "Коллеги", "Партнёр", "Питомцы"],
+            ["Дом", "Работа", "Школа", "Транспорт", "Улица"]
+        ]
+        
+        static var blueIconImg: UIImage = UIImage(named: "TestEmotionBlueImg")!
+        static var greenIconImg: UIImage = UIImage(named: "TestEmotionGreenImg")!
+        static var yellowIconImg: UIImage = UIImage(named: "TestEmotionYellowImg")!
+        static var redIconImg: UIImage = UIImage(named: "TestEmotionRedImg")!
     }
 }

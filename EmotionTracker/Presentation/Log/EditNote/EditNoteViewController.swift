@@ -18,10 +18,11 @@ class EditNoteViewController: UIViewController {
     private var navigationBar = DefaultNavBar(title: Constants.navigationBarTitle)
     
     private lazy var emotionCardView: EmotionCardView = {
+        let emotionColor = EmotionColor.from(uiColor: viewModel.emotionColor)!
         return EmotionCardView(time: viewModel.time,
                                emotion: viewModel.emotionTitle,
-                               emotionColor: EmotionColor.from(uiColor: viewModel.emotionColor)!,
-                               icon: UIImage(named: "TestEmotionImg"))
+                               emotionColor: emotionColor,
+                               icon: viewModel.getEmotionIcon(for: viewModel.emotionColor))
     }()
     
     private var tagCollectionView = TagCollectionView()
@@ -32,6 +33,7 @@ class EditNoteViewController: UIViewController {
         setupUI()
         setupConstraints()
         setupButtonActions()
+        setupKeyboardHandling()
         
         DispatchQueue.main.async {
             self.tagCollectionView.reloadAndResize()
@@ -42,26 +44,22 @@ class EditNoteViewController: UIViewController {
         super.viewWillAppear(animated)
         navigationController?.setNavigationBarHidden(true, animated: animated)
         tabBarController?.tabBar.isHidden = true
+        
+        addKeyboardObservers()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         navigationController?.setNavigationBarHidden(false, animated: animated)
         tabBarController?.tabBar.isHidden = false
+        
+        removeKeyboardObservers()
     }
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         updateTagCollectionViewHeight()
-        
     }
-    
-    private func updateTagCollectionViewHeight() {
-        tagCollectionView.snp.updateConstraints { make in
-            make.height.equalTo(tagCollectionView.intrinsicContentSize.height)
-        }
-    }
-    
 }
 
 private extension EditNoteViewController {
@@ -83,7 +81,6 @@ private extension EditNoteViewController {
     }
     
     func configureTagCollectionView() {
-        tagCollectionView.translatesAutoresizingMaskIntoConstraints = false
         tagCollectionView.configure(with: viewModel)
         tagCollectionView.onTagSelected = { [weak self] tag, section in
             guard let self = self else { return }
@@ -141,6 +138,26 @@ private extension EditNoteViewController {
 }
 
 private extension EditNoteViewController {
+    func updateTagCollectionViewHeight() {
+        tagCollectionView.snp.updateConstraints { make in
+            make.height.equalTo(tagCollectionView.intrinsicContentSize.height)
+        }
+    }
+    
+    func updateEmotionIcon() {
+        let emotionIcon = viewModel.getEmotionIcon(for: viewModel.emotionColor)
+        emotionCardView.updateIcon(image: emotionIcon)
+    }
+    
+    func findActiveTextField() -> UIView? {
+        return view.findSubview(ofType: UITextField.self, where: { $0.isFirstResponder }) ??
+               view.findSubview(ofType: UITextView.self, where: { $0.isFirstResponder })
+    }
+}
+
+// MARK: - Button Actions
+
+private extension EditNoteViewController {
     func setupButtonActions() {
         navigationBar.onButtonTapped = { [weak self] in
             self?.coordinator?.handleBackButtonTapped()
@@ -149,6 +166,64 @@ private extension EditNoteViewController {
         saveNoteButton.onButtonTapped = { [weak self] in
             self?.coordinator?.handleSaveButtonTapped()
         }
+    }
+}
+
+// MARK: - Keyboard Handling
+
+private extension EditNoteViewController {
+    func setupKeyboardHandling() {
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        tapGesture.cancelsTouchesInView = false
+        view.addGestureRecognizer(tapGesture)
+    }
+    
+    func addKeyboardObservers() {
+        NotificationCenter.default.addObserver(self,
+                                              selector: #selector(keyboardWillShow),
+                                              name: UIResponder.keyboardWillShowNotification,
+                                              object: nil)
+        NotificationCenter.default.addObserver(self,
+                                              selector: #selector(keyboardWillHide),
+                                              name: UIResponder.keyboardWillHideNotification,
+                                              object: nil)
+    }
+    
+    func removeKeyboardObservers() {
+        NotificationCenter.default.removeObserver(self,
+                                                 name: UIResponder.keyboardWillShowNotification,
+                                                 object: nil)
+        NotificationCenter.default.removeObserver(self,
+                                                 name: UIResponder.keyboardWillHideNotification,
+                                                 object: nil)
+    }
+    
+    @objc func dismissKeyboard() {
+        view.endEditing(true)
+    }
+    
+    @objc func keyboardWillShow(notification: NSNotification) {
+        if let keyboardFrame = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect {
+            let keyboardHeight = keyboardFrame.height
+            let bottomInset = keyboardHeight + Metrics.keyboardInsets
+            
+            scrollView.contentInset.bottom = bottomInset
+            var verticalInsets = scrollView.verticalScrollIndicatorInsets
+            verticalInsets.bottom = bottomInset
+            scrollView.verticalScrollIndicatorInsets = verticalInsets
+            
+            if let activeTextField = findActiveTextField() {
+                let textFieldFrame = activeTextField.convert(activeTextField.bounds, to: scrollView)
+                scrollView.scrollRectToVisible(textFieldFrame, animated: true)
+            }
+        }
+    }
+    
+    @objc func keyboardWillHide(notification: NSNotification) {
+        scrollView.contentInset.bottom = 0
+        var verticalInsets = scrollView.verticalScrollIndicatorInsets
+        verticalInsets.bottom = 0
+        scrollView.verticalScrollIndicatorInsets = verticalInsets
     }
 }
 
@@ -163,6 +238,7 @@ private extension EditNoteViewController {
         static let saveNoteButtonHeight: CGFloat = 56
         static let scrollViewBottomEdgeOffset: CGFloat = -12
         static let scrollViewTopEdgeOffset: CGFloat = 60
+        static let keyboardInsets: CGFloat = 20
     }
     
     enum Constants {

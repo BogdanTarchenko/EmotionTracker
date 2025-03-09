@@ -15,6 +15,11 @@ struct LocalizedKey {
     
     enum Log {
         static let logTitle = NSLocalizedString("log_title", comment: "Log screen title")
+        static let alertTitle = NSLocalizedString("alert_log_title", comment: "Log screen alert title")
+        static let alertMessage = NSLocalizedString("alert_log_message", comment: "Log screen alert message")
+        static let alertCancel = NSLocalizedString("alert_log_cancel", comment: "Log screen alert cancel")
+        static let todayString = NSLocalizedString("today_string", comment:"Today string")
+        static let yesterdayString = NSLocalizedString("yesterday_string", comment: "Yesterday string")
     }
     
     enum TabBar {
@@ -34,6 +39,8 @@ struct LocalizedKey {
     enum EditNote {
         static let navigationBarTitle = NSLocalizedString("editNoteNavigation_title", comment: "EditNote screen navigation title")
         static let saveNoteButtonTitle = NSLocalizedString("saveNoteButton_title", comment: "Save note button title")
+        static let duplicatedTagsAlertMessage = NSLocalizedString("duplicatedTagsAlert_message", comment: "Duplicated tags alert message")
+        static let duplicatedTagsAlertTitle = NSLocalizedString("duplicatedTagsAlert_title", comment: "Duplicated tags alert title")
     }
     
     enum AddNote {

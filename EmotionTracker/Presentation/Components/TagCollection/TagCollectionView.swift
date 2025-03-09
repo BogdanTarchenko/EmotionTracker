@@ -9,7 +9,7 @@ import UIKit
 
 class TagCollectionView: UICollectionView, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
-    let sections = ["Чем вы занимались?", "С кем вы были?", "Где вы были?"]
+    let sections = Constants.sections
     private var viewModel: EditNoteViewModel?
     
     var selectedTags: Set<String> = []
@@ -61,7 +61,7 @@ class TagCollectionView: UICollectionView, UICollectionViewDelegate, UICollectio
         
         if indexPath.row == tagsInSection.count {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "AddTagCell", for: indexPath) as! AddTagCell
-            cell.onTap = { [weak self] in
+            cell.onTap = {
                 cell.startEditing()
             }
             cell.onTagAdded = { [weak self] newTag in
@@ -130,12 +130,12 @@ class TagCollectionView: UICollectionView, UICollectionViewDelegate, UICollectio
         guard let viewController = self.findViewController() else { return }
         
         let alert = UIAlertController(
-            title: "Ошибка",
-            message: "Этот тег уже существует в данной секции",
+            title: Constants.alertTitle,
+            message: Constants.alertMessage,
             preferredStyle: .alert
         )
         
-        alert.addAction(UIAlertAction(title: "OK", style: .default))
+        alert.addAction(UIAlertAction(title: Constants.okButton, style: .default))
         viewController.present(alert, animated: true)
     }
     
@@ -166,5 +166,9 @@ private extension TagCollectionView {
     
     enum Constants {
         static let plusString: String = "+"
+        static let sections: [String] = ["Чем вы занимались?", "С кем вы были?", "Где вы были?"]
+        static let alertTitle = LocalizedKey.EditNote.duplicatedTagsAlertTitle
+        static let alertMessage = LocalizedKey.EditNote.duplicatedTagsAlertMessage
+        static let okButton = "OK"
     }
 }

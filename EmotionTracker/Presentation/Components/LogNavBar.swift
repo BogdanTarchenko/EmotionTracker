@@ -35,6 +35,8 @@ final class LogNavBar: UIView {
     private let streakTitleLabel = UILabel()
     private let streakValueLabel = UILabel()
     
+    var onDailyGoalTap: (() -> Void)?
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupView()
@@ -63,6 +65,10 @@ final class LogNavBar: UIView {
         
         addSubview(stackView)
         setupConstraints()
+        
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dailyGoalTapped))
+        dailyGoalContainer.addGestureRecognizer(tapGesture)
+        dailyGoalContainer.isUserInteractionEnabled = true
     }
     
     private func setupTitleLabel(_ label: UILabel, in container: UIStackView) {
@@ -120,6 +126,23 @@ final class LogNavBar: UIView {
         streakContainer.snp.remakeConstraints { make in
             make.height.equalTo(Metrics.containerViewHeight)
         }
+    }
+    
+    @objc private func dailyGoalTapped() {
+        let generator = UIImpactFeedbackGenerator(style: .light)
+        generator.prepare()
+        generator.impactOccurred()
+        
+        onDailyGoalTap?()
+    }
+    
+    func updateStreak(_ streak: Int) {
+        streakValueLabel.text = "\(streak) \(pluralize(count: streak, one: Constants.oneDay, few: Constants.fewDays, many: Constants.manyDays))"
+    }
+    
+    func updateTodayCount(_ count: Int, goal: Int) {
+        totalLogsLabel.text = "\(count) \(pluralize(count: count, one: Constants.oneNote, few: Constants.fewNotes, many: Constants.manyNotes))"
+        dailyGoalValueLabel.text = "\(goal) \(pluralize(count: goal, one: Constants.oneNote, few: Constants.fewNotes, many: Constants.manyNotes))"
     }
 }
 

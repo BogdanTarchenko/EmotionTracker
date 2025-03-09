@@ -64,7 +64,7 @@ final class EditNoteCoordinator: Coordinator {
     func handleSaveButtonTapped() {
         if let addNoteCoordinator = parentCoordinator as? AddNoteCoordinator {
             if let logCoordinator = addNoteCoordinator.parentCoordinator as? LogCoordinator {
-                if let emotionColor = EmotionColor.from(uiColor: viewModel.emotionColor) {
+                if EmotionColor.from(uiColor: viewModel.emotionColor) != nil {
                     logCoordinator.handleSaveNewEmotion(
                         title: viewModel.emotionTitle,
                         color: viewModel.emotionColor,

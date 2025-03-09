@@ -23,7 +23,7 @@ class TimePickerManager {
             make.top.equalToSuperview().offset(50)
             make.bottom.equalToSuperview().offset(-50)
         }
-
+        
         alert.addAction(UIAlertAction(title: LocalizedKey.AlertTimePicker.cancelButtonText, style: .cancel, handler: nil))
         alert.addAction(UIAlertAction(title: LocalizedKey.AlertTimePicker.pickButtonText, style: .default, handler: { _ in
             completion(datePicker.date)

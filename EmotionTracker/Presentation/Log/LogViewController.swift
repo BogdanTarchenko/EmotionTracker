@@ -34,6 +34,10 @@ final class LogViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.setNavigationBarHidden(true, animated: animated)
+        
+        viewModel.checkAndUpdateStreak()
+        updateNavBarStats()
+        updateActivityRing()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -50,6 +54,32 @@ final class LogViewController: UIViewController {
             selectedSectionTags: selectedSectionTags
         )
         reloadCollectionView()
+        updateNavBarStats()
+        updateActivityRing()
+    }
+    
+    func updateActivityRing() {
+        let hasTodayRecords = viewModel.hasTodayRecords()
+        let progress = viewModel.getRingProgress()
+        
+        if hasTodayRecords { 
+            let emotionSegments = viewModel.getTodayEmotionsForRing()
+            activityRing?.ring = ActivityRing(
+                color: .ringEmpty,
+                gradientColor: .ringDefault,
+                progress: progress,
+                emotionSegments: emotionSegments,
+                isEmpty: false
+            )
+        } else {
+            activityRing?.ring = ActivityRing(
+                color: .ringEmpty,
+                gradientColor: .ringDefault,
+                progress: 0.5,
+                emotionSegments: [],
+                isEmpty: true
+            )
+        }
     }
     
     func updateEmotion(index: Int, title: String, emotionColor: EmotionColor, selectedTags: Set<String>, tagsBySection: [[(tag: String, index: Int)]] = [[], [], []], selectedSectionTags: Set<EditNoteViewModel.SectionTag> = []) {
@@ -62,6 +92,7 @@ final class LogViewController: UIViewController {
             selectedSectionTags: selectedSectionTags
         )
         reloadCollectionView()
+        updateNavBarStats()
     }
 }
 
@@ -85,7 +116,15 @@ private extension LogViewController {
     }
     
     func configureLogNavBar() {
-        logNavBar.configure(with: LogNavBar.ViewModel(totalLogs: 4, dailyGoal: 2, streakDays: 0))
+        logNavBar.configure(with: LogNavBar.ViewModel(
+            totalLogs: viewModel.getTodayRecordsCount(),
+            dailyGoal: viewModel.dailyGoal,
+            streakDays: viewModel.getCurrentStreak()
+        ))
+        
+        logNavBar.onDailyGoalTap = { [weak self] in
+            self?.showGoalPicker()
+        }
     }
     
     func configureLogTitleLabel() {
@@ -97,7 +136,40 @@ private extension LogViewController {
     
     func configureActivityRing() {
         let frame = activityRingView.bounds
-        activityRing = ActivityRingView(frame: frame, ring: ActivityRing(color: .ringEmpty, gradientColor: .ringDefault, progress: 0.5))
+        
+        let hasTodayRecords = viewModel.hasTodayRecords()
+        let progress = viewModel.getRingProgress()
+        
+        if hasTodayRecords {
+            let emotionSegments = viewModel.getTodayEmotionsForRing()
+            activityRing = ActivityRingView(
+                frame: frame, 
+                ring: ActivityRing(
+                    color: .ringEmpty, 
+                    gradientColor: .ringDefault, 
+                    progress: progress,
+                    emotionSegments: emotionSegments,
+                    isEmpty: false
+                )
+            )
+        } else {
+            activityRing = ActivityRingView(
+                frame: frame, 
+                ring: ActivityRing(
+                    color: .ringEmpty, 
+                    gradientColor: .ringDefault, 
+                    progress: 0.5,
+                    emotionSegments: [],
+                    isEmpty: true
+                )
+            )
+        }
+        
+        activityRingView.addSubview(activityRing!)
+        
+        activityRing?.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
     }
     
     func configureCollectionView() {
@@ -177,7 +249,16 @@ private extension LogViewController {
     
     @objc func handleEmotionCardTapped(at index: Int) {
         if let emotionData = viewModel.getEmotionData(at: index) {
-            coordinator?.handleEmotionCardTapped(with: emotionData)
+            let data = (
+                index: index,
+                title: emotionData.emotion,
+                color: emotionData.emotionColor.toUIColor(),
+                time: emotionData.time,
+                selectedTags: emotionData.selectedTags,
+                tagsBySection: emotionData.tagsBySection,
+                selectedSectionTags: emotionData.selectedSectionTags
+            )
+            coordinator?.handleEmotionCardTapped(with: data)
         }
     }
     
@@ -189,6 +270,40 @@ private extension LogViewController {
         addNoteButton.onButtonTapped = { [weak self] in
             self?.handleAddNoteButtonTapped()
         }
+    }
+    
+    func showGoalPicker() {
+        let alertController = UIAlertController(
+            title: Constants.alertTitle,
+            message: Constants.alertMessage,
+            preferredStyle: .alert
+        )
+        
+        for i in 1...10 {
+            let action = UIAlertAction(title: "\(i)", style: .default) { [weak self] _ in
+                self?.viewModel.dailyGoal = i
+                self?.updateNavBarStats()
+                self?.updateActivityRing()
+            }
+            
+            if i == viewModel.dailyGoal {
+                action.setValue(true, forKey: "checked")
+            }
+            
+            alertController.addAction(action)
+        }
+        
+        alertController.addAction(UIAlertAction(title: Constants.alertCancel, style: .cancel))
+        
+        present(alertController, animated: true)
+    }
+    
+    func updateNavBarStats() {
+        logNavBar.configure(with: LogNavBar.ViewModel(
+            totalLogs: viewModel.getTodayRecordsCount(),
+            dailyGoal: viewModel.dailyGoal,
+            streakDays: viewModel.getCurrentStreak()
+        ))
     }
 }
 
@@ -213,10 +328,11 @@ private extension LogViewController {
             self.updateCollectionViewHeight()
             self.view.layoutIfNeeded()
         }, completion: { _ in
-            let lastItemIndex = self.viewModel.emotionCards.count - 1
-            guard lastItemIndex >= 0 else { return }
-            let lastIndexPath = IndexPath(item: lastItemIndex, section: 0)
-            self.collectionView.scrollToItem(at: lastIndexPath, at: .bottom, animated: true)
+            if !self.viewModel.emotionSections.isEmpty && 
+                !self.viewModel.emotionSections[0].cards.isEmpty {
+                let firstIndexPath = IndexPath(item: 0, section: 0)
+                self.collectionView.scrollToItem(at: firstIndexPath, at: .top, animated: true)
+            }
         })
     }
 }
@@ -224,8 +340,12 @@ private extension LogViewController {
 // MARK: - UICollectionViewDataSource
 
 extension LogViewController: UICollectionViewDataSource {
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
+        return viewModel.emotionSections.count
+    }
+    
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return viewModel.emotionCards.count
+        return viewModel.emotionSections[section].cards.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -233,12 +353,25 @@ extension LogViewController: UICollectionViewDataSource {
             return UICollectionViewCell()
         }
         
-        let cardInfo = viewModel.emotionCards[indexPath.item]
+        let cardInfo = viewModel.emotionSections[indexPath.section].cards[indexPath.item]
         cell.configure(time: cardInfo.time, emotion: cardInfo.emotion, emotionColor: cardInfo.emotionColor, icon: cardInfo.icon)
+        
         cell.onTap = { [weak self] in
-            self?.handleEmotionCardTapped(at: indexPath.item)
+            let globalIndex = self?.getGlobalIndexFromIndexPath(indexPath) ?? 0
+            self?.handleEmotionCardTapped(at: globalIndex)
         }
         return cell
+    }
+    
+    func getGlobalIndexFromIndexPath(_ indexPath: IndexPath) -> Int {
+        var globalIndex = 0
+        
+        for section in 0..<indexPath.section {
+            globalIndex += viewModel.emotionSections[section].cards.count
+        }
+        
+        globalIndex += indexPath.item
+        return globalIndex
     }
 }
 
@@ -249,7 +382,13 @@ extension LogViewController: UICollectionViewDelegateFlowLayout {
                         layout collectionViewLayout: UICollectionViewLayout,
                         sizeForItemAt indexPath: IndexPath) -> CGSize {
         let width = collectionView.bounds.width
-        return CGSize(width: width, height: 158)
+        return CGSize(width: width, height: Metrics.cellHeight)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView,
+                        layout collectionViewLayout: UICollectionViewLayout,
+                        insetForSectionAt section: Int) -> UIEdgeInsets {
+        return UIEdgeInsets(top: 0, left: 0, bottom: 24, right: 0)
     }
 }
 
@@ -271,5 +410,8 @@ private extension LogViewController {
         static let logTitleLabelTextColor: UIColor = .textPrimary
         static let logTitleLabelFont: UIFont = UIFont(name: "Gwen-Trial-Regular", size: 36)!
         static let backgroundColor: UIColor = .background
+        static let alertTitle: String = LocalizedKey.Log.alertTitle
+        static let alertMessage: String = LocalizedKey.Log.alertMessage
+        static let alertCancel: String = LocalizedKey.Log.alertCancel
     }
 }

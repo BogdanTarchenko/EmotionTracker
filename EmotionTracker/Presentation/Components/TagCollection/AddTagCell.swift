@@ -171,22 +171,20 @@ private extension AddTagCell {
 
 extension AddTagCell: UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
+    }
+    
+    func textFieldDidEndEditing(_ textField: UITextField) {
         guard let text = textField.text?.trimmingCharacters(in: .whitespacesAndNewlines),
               !text.isEmpty else {
             setEditing(false, animated: true)
-            return true
+            return
         }
         
         onTagAdded?(text)
         textField.text = ""
         setEditing(false, animated: true)
-        return true
-    }
-    
-    func textFieldDidEndEditing(_ textField: UITextField) {
-        if textField.text?.isEmpty ?? true {
-            setEditing(false, animated: true)
-        }
     }
     
     func textFieldShouldEndEditing(_ textField: UITextField) -> Bool {

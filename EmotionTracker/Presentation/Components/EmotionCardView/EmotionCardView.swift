@@ -18,7 +18,7 @@ class EmotionCardView: UIView {
         return label
     }()
     private let emotionLabel = UILabel()
-    private let iconView = UIImageView()
+    private var iconView = UIImageView()
     
     var onTap: (() -> Void)?
     
@@ -45,6 +45,9 @@ class EmotionCardView: UIView {
         emotionLabel.text = emotion.lowercased()
         emotionLabel.textColor = emotionColor.textColor
         emotionLabel.font = Constants.emotionLabelFont
+        emotionLabel.adjustsFontSizeToFitWidth = true
+        emotionLabel.minimumScaleFactor = 0.8
+        emotionLabel.numberOfLines = 1
         
         iconView.image = icon
         iconView.contentMode = .scaleAspectFit
@@ -65,6 +68,7 @@ class EmotionCardView: UIView {
         
         emotionLabel.snp.makeConstraints { make in
             make.leading.bottom.equalToSuperview().inset(Metrics.emotionLabelInsets)
+            make.trailing.equalTo(iconView.snp.leading).offset(-Metrics.emotionLabelInsets)
             make.top.equalTo(feelingLabel.snp.bottom)
         }
         
@@ -91,6 +95,14 @@ class EmotionCardView: UIView {
     override func layoutSubviews() {
         super.layoutSubviews()
         layer.sublayers?.first?.frame = bounds
+    }
+}
+
+// MARK: - Public Methods
+
+extension EmotionCardView {
+    func updateIcon(image: UIImage?) {
+        iconView.image = image
     }
 }
 
