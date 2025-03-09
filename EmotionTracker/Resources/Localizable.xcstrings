@@ -24,13 +24,37 @@
       }
     },
     "alert_log_cancel" : {
-      "comment" : "Log screen alert cancel"
+      "comment" : "Log screen alert cancel",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Отмена"
+          }
+        }
+      }
     },
     "alert_log_message" : {
-      "comment" : "Log screen alert message"
+      "comment" : "Log screen alert message",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Выберите дневную цель"
+          }
+        }
+      }
     },
     "alert_log_title" : {
-      "comment" : "Log screen alert title"
+      "comment" : "Log screen alert title",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Дневная цель"
+          }
+        }
+      }
     },
     "alert_title" : {
       "comment" : "Alert settings switcher title",
@@ -88,10 +112,26 @@
       }
     },
     "duplicatedTagsAlert_message" : {
-      "comment" : "Duplicated tags alert message"
+      "comment" : "Duplicated tags alert message",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Тег уже присутствует в данной секции"
+          }
+        }
+      }
     },
     "duplicatedTagsAlert_title" : {
-      "comment" : "Duplicated tags alert title"
+      "comment" : "Duplicated tags alert title",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ошибка"
+          }
+        }
+      }
     },
     "editNoteNavigation_title" : {
       "comment" : "EditNote screen navigation title",
