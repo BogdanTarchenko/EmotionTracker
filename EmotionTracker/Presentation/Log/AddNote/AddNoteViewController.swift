@@ -27,6 +27,7 @@ class AddNoteViewController: UIViewController {
         setupConstraints()
         setupButtonActions()
         setupViewModel()
+        view.accessibilityIdentifier = "AddNoteView"
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -48,21 +49,26 @@ private extension AddNoteViewController {
         configureNavigationBar()
         setupColorGroups()
         configureContainer()
+        configureEmotionPicker()
+    }
+    
+    func configureEmotionPicker() {
+        emotionPicker.accessibilityIdentifier = "EmotionPicker"
     }
     
     func setupColorGroups() {
         let allEmotions = viewModel.emotions
         
-        let redGroup = createColorGroup(with: Array(allEmotions[0..<4]))
+        let redGroup = createColorGroup(with: Array(allEmotions[0..<4]), groupPrefix: "Red")
         redGroup.frame = CGRect(x: 0, y: 0, width: Metrics.colorGroupSize, height: Metrics.colorGroupSize)
         
-        let yellowGroup = createColorGroup(with: Array(allEmotions[4..<8]))
+        let yellowGroup = createColorGroup(with: Array(allEmotions[4..<8]), groupPrefix: "Yellow")
         yellowGroup.frame = CGRect(x: Metrics.colorGroupSize, y: 0, width: Metrics.colorGroupSize, height: Metrics.colorGroupSize)
         
-        let blueGroup = createColorGroup(with: Array(allEmotions[8..<12]))
+        let blueGroup = createColorGroup(with: Array(allEmotions[8..<12]), groupPrefix: "Blue")
         blueGroup.frame = CGRect(x: 0, y: Metrics.colorGroupSize, width: Metrics.colorGroupSize, height: Metrics.colorGroupSize)
         
-        let greenGroup = createColorGroup(with: Array(allEmotions[12..<16]))
+        let greenGroup = createColorGroup(with: Array(allEmotions[12..<16]), groupPrefix: "Green")
         greenGroup.frame = CGRect(x: Metrics.colorGroupSize, y: Metrics.colorGroupSize, width: Metrics.colorGroupSize, height: Metrics.colorGroupSize)
         
         [redGroup, yellowGroup, blueGroup, greenGroup].forEach { group in
@@ -192,7 +198,7 @@ private extension AddNoteViewController {
 
 // MARK: - Create Color Group Method
 private extension AddNoteViewController {
-    func createColorGroup(with emotions: [(String, UIColor)]) -> UIView {
+    func createColorGroup(with emotions: [(String, UIColor)], groupPrefix: String) -> UIView {
         let container = UIView()
         
         for (index, emotion) in emotions.enumerated() {
@@ -207,6 +213,7 @@ private extension AddNoteViewController {
             circle.layer.cornerRadius = Metrics.defaultCircleRadius / 2
             circle.clipsToBounds = true
             circle.isUserInteractionEnabled = true
+            circle.accessibilityIdentifier = "\(groupPrefix)EmotionCircle_\(index)"
             container.addSubview(circle)
             
             let tap = UITapGestureRecognizer(target: self, action: #selector(circleTapped(_:)))

@@ -44,6 +44,7 @@ private extension EmotionPicker {
         layer.masksToBounds = true
         
         configurePickEmotionTitleLabel()
+        configurePickEmotionButton()
         configureEmotionTitleLabel()
         configureEmotionDescription()
     }
@@ -53,6 +54,10 @@ private extension EmotionPicker {
         pickEmotionTitleLabel.textColor = Constants.pickEmotionTitleColor
         pickEmotionTitleLabel.font = Constants.pickEmotionTitleFont
         pickEmotionTitleLabel.numberOfLines = Metrics.defaultNumberOfLines
+    }
+    
+    func configurePickEmotionButton() {
+        pickEmotionButton.accessibilityIdentifier = "EmotionPickerButton"
     }
     
     func configureEmotionTitleLabel() {

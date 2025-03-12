@@ -10,7 +10,18 @@
 		FCEEF16E2D68970D001A1E6A /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = FCEEF16D2D68970D001A1E6A /* SnapKit */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		8FA9495D2D812DB40048A54C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = FCEEF1162D67572D001A1E6A /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = FCEEF11D2D67572D001A1E6A;
+			remoteInfo = EmotionTracker;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
+		8FA949572D812DB40048A54C /* EmotionTrackerUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = EmotionTrackerUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		FCEEF11E2D67572D001A1E6A /* EmotionTracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EmotionTracker.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -25,6 +36,11 @@
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
+		8FA949582D812DB40048A54C /* EmotionTrackerUITests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = EmotionTrackerUITests;
+			sourceTree = "<group>";
+		};
 		FCEEF1202D67572D001A1E6A /* EmotionTracker */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
@@ -36,6 +52,13 @@
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		8FA949542D812DB40048A54C /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		FCEEF11B2D67572D001A1E6A /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -51,6 +74,7 @@
 			isa = PBXGroup;
 			children = (
 				FCEEF1202D67572D001A1E6A /* EmotionTracker */,
+				8FA949582D812DB40048A54C /* EmotionTrackerUITests */,
 				FCEEF11F2D67572D001A1E6A /* Products */,
 			);
 			sourceTree = "<group>";
@@ -59,6 +83,7 @@
 			isa = PBXGroup;
 			children = (
 				FCEEF11E2D67572D001A1E6A /* EmotionTracker.app */,
+				8FA949572D812DB40048A54C /* EmotionTrackerUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -66,6 +91,29 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		8FA949562D812DB40048A54C /* EmotionTrackerUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 8FA9495F2D812DB40048A54C /* Build configuration list for PBXNativeTarget "EmotionTrackerUITests" */;
+			buildPhases = (
+				8FA949532D812DB40048A54C /* Sources */,
+				8FA949542D812DB40048A54C /* Frameworks */,
+				8FA949552D812DB40048A54C /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				8FA9495E2D812DB40048A54C /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				8FA949582D812DB40048A54C /* EmotionTrackerUITests */,
+			);
+			name = EmotionTrackerUITests;
+			packageProductDependencies = (
+			);
+			productName = EmotionTrackerUITests;
+			productReference = 8FA949572D812DB40048A54C /* EmotionTrackerUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
 		FCEEF11D2D67572D001A1E6A /* EmotionTracker */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = FCEEF1312D67572F001A1E6A /* Build configuration list for PBXNativeTarget "EmotionTracker" */;
@@ -96,9 +144,13 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
-				LastSwiftUpdateCheck = 1610;
+				LastSwiftUpdateCheck = 1620;
 				LastUpgradeCheck = 1610;
 				TargetAttributes = {
+					8FA949562D812DB40048A54C = {
+						CreatedOnToolsVersion = 16.2;
+						TestTargetID = FCEEF11D2D67572D001A1E6A;
+					};
 					FCEEF11D2D67572D001A1E6A = {
 						CreatedOnToolsVersion = 16.1;
 					};
@@ -123,11 +175,19 @@
 			projectRoot = "";
 			targets = (
 				FCEEF11D2D67572D001A1E6A /* EmotionTracker */,
+				8FA949562D812DB40048A54C /* EmotionTrackerUITests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		8FA949552D812DB40048A54C /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		FCEEF11C2D67572D001A1E6A /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -138,6 +198,13 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		8FA949532D812DB40048A54C /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		FCEEF11A2D67572D001A1E6A /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -147,7 +214,49 @@
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXTargetDependency section */
+		8FA9495E2D812DB40048A54C /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = FCEEF11D2D67572D001A1E6A /* EmotionTracker */;
+			targetProxy = 8FA9495D2D812DB40048A54C /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
 /* Begin XCBuildConfiguration section */
+		8FA949602D812DB40048A54C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.2;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = tarchenko.EmotionTrackerUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = EmotionTracker;
+			};
+			name = Debug;
+		};
+		8FA949612D812DB40048A54C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.2;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = tarchenko.EmotionTrackerUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = EmotionTracker;
+			};
+			name = Release;
+		};
 		FCEEF1322D67572F001A1E6A /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -338,6 +447,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		8FA9495F2D812DB40048A54C /* Build configuration list for PBXNativeTarget "EmotionTrackerUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				8FA949602D812DB40048A54C /* Debug */,
+				8FA949612D812DB40048A54C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		FCEEF1192D67572D001A1E6A /* Build configuration list for PBXProject "EmotionTracker" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

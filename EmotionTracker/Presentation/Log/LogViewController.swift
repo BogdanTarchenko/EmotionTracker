@@ -108,6 +108,12 @@ private extension LogViewController {
         configureLogTitleLabel()
         configureActivityRing()
         configureCollectionView()
+        
+        logNavBar.accessibilityIdentifier = "LogNavBar"
+        logTitleLabel.accessibilityIdentifier = "LogTitleLabel"
+        activityRingView.accessibilityIdentifier = "ActivityRingView"
+        addNoteButton.accessibilityIdentifier = "AddNoteButton"
+        collectionView.accessibilityIdentifier = "EmotionsCollectionView"
     }
     
     func configureScrollView() {

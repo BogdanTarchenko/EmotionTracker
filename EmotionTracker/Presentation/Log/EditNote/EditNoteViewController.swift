@@ -38,6 +38,8 @@ class EditNoteViewController: UIViewController {
         DispatchQueue.main.async {
             self.tagCollectionView.reloadAndResize()
         }
+        
+        view.accessibilityIdentifier = "EditNoteView"
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -69,6 +71,7 @@ private extension EditNoteViewController {
         configureScrollView()
         configureEmotionCardView()
         configureTagCollectionView()
+        configureSaveButton()
     }
     
     func configureScrollView() {
@@ -91,6 +94,10 @@ private extension EditNoteViewController {
             guard let self = self else { return false }
             return self.viewModel.addTag(tag, section: section)
         }
+    }
+    
+    func configureSaveButton() {
+        saveNoteButton.accessibilityIdentifier = "SaveNoteButton"
     }
     
     func setupConstraints() {

@@ -45,6 +45,7 @@ private extension WelcomeViewController {
         appleIDButton.onTap = {
             self.handleAppleIDButtonTapped()
         }
+        appleIDButton.accessibilityIdentifier = "AppleIDButton"
     }
     
     func configureWelcomeTitleLabel() {
