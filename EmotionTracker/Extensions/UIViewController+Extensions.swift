@@ -16,11 +16,15 @@ extension UIViewController {
             appearance.configureWithTransparentBackground()
             appearance.backgroundColor = .clear
             appearance.shadowColor = .clear
+            
             navigationBar.standardAppearance = appearance
             navigationBar.scrollEdgeAppearance = appearance
             navigationBar.compactAppearance = appearance
+            
             navigationBar.isTranslucent = true
             navigationBar.backgroundColor = .clear
+            navigationBar.isHidden = true
+            navigationBar.isUserInteractionEnabled = false
         }
     }
 }

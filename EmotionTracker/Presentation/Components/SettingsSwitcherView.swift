@@ -82,7 +82,7 @@ private extension SettingsSwitcherView {
         static let switcherHeight: CGFloat = 32
         static let switcherWidth: CGFloat = 52
     }
-
+    
     enum Constants {
         static let iconImageColor: UIColor = .iconPrimary
         static let titleLabelTextColor: UIColor = .textPrimary

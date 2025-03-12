@@ -260,7 +260,7 @@ private extension AddNoteViewController {
     
     enum Constants {
         static let backgroundColor: UIColor = .background
-        static let labelDefaultFont: UIFont = UIFont(name: "Gwen-Trial-Black", size: 10)!
-        static let labelScaledFont: UIFont = UIFont(name: "Gwen-Trial-Black", size: 14)!
+        static let labelDefaultFont: UIFont = UIFont(name: "GwenText-Trial-Black", size: 10)!
+        static let labelScaledFont: UIFont = UIFont(name: "GwenText-Trial-Black", size: 14)!
     }
 }

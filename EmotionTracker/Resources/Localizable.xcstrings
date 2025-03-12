@@ -188,6 +188,28 @@
         }
       }
     },
+    "firstVC_title" : {
+      "comment" : "first VC title",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Эмоции по категориям"
+          }
+        }
+      }
+    },
+    "fourthVC_title" : {
+      "comment" : "fourth VC title",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ваше настроение в течение дня"
+          }
+        }
+      }
+    },
     "log_title" : {
       "comment" : "Log screen title",
       "localizations" : {
@@ -298,6 +320,17 @@
         }
       }
     },
+    "secondVC_title" : {
+      "comment" : "second VC title",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Эмоции по дням недели"
+          }
+        }
+      }
+    },
     "settings_title" : {
       "comment" : "Settings screen title",
       "localizations" : {
@@ -338,6 +371,17 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "серия:"
+          }
+        }
+      }
+    },
+    "thirdVC_title" : {
+      "comment" : "third VC title",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Самые частые эмоции"
           }
         }
       }

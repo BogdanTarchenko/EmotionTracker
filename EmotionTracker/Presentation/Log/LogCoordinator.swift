@@ -36,8 +36,8 @@ final class LogCoordinator: Coordinator {
     func handleSaveNewEmotion(title: String, color: UIColor, selectedTags: Set<String>, tagsBySection: [[(tag: String, index: Int)]] = [[], [], []], selectedSectionTags: Set<EditNoteViewModel.SectionTag> = []) {
         if let emotionColor = EmotionColor.from(uiColor: color) {
             logViewController?.addNewEmotion(
-                title: title, 
-                emotionColor: emotionColor, 
+                title: title,
+                emotionColor: emotionColor,
                 selectedTags: selectedTags,
                 tagsBySection: tagsBySection,
                 selectedSectionTags: selectedSectionTags

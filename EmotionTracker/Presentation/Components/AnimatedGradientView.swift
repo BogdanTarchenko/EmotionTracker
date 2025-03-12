@@ -72,7 +72,7 @@ class AnimatedGradientView: UIView {
 
 private extension AnimatedGradientView {
     enum Metrics {
-        static let animationDuration: CGFloat = 24
+        static let animationDuration: CGFloat = 8
         static let animationRadius: CGFloat = 150
         static let gradientLocations: [NSNumber] = [0.0, 1.0]
         static let startPoint: CGPoint = CGPoint(x: 0.5, y: 0.5)

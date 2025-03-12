@@ -19,6 +19,6 @@ final class StatisticsCoordinator: Coordinator {
     func start() {
         let statisticsViewController = StatisticsViewController()
         statisticsViewController.coordinator = self
-        navigationController.setViewControllers([statisticsViewController], animated: true)
+        navigationController.setViewControllers([statisticsViewController], animated: false)
     }
 }
