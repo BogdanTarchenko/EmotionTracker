@@ -6,12 +6,14 @@
 //
 
 import UIKit
+import CoreData
 
 final class EditNoteViewModel {
     let index: Int?
     let emotionTitle: String
     let emotionColor: UIColor
     let time: String
+    let record: EmotionRecord?
     
     var tagsBySection: [[(tag: String, index: Int)]] = [[], [], []]
     
@@ -40,12 +42,14 @@ final class EditNoteViewModel {
          time: String? = nil,
          selectedTags: Set<String> = [],
          tagsBySection: [[(tag: String, index: Int)]] = [],
-         selectedSectionTags: Set<SectionTag> = []) {
+         selectedSectionTags: Set<SectionTag> = [],
+         record: EmotionRecord? = nil) {
         
         self.index = index
         self.emotionTitle = emotionTitle
         self.emotionColor = emotionColor
         self.time = time ?? Date().formattedRelativeTime()
+        self.record = record
         self.selectedTags = selectedTags
         self.selectedSectionTags = selectedSectionTags
         

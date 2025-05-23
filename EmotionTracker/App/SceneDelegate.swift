@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import CoreData
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     
@@ -25,7 +26,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         appCoordinator?.start()
     }
     
-    func sceneDidDisconnect(_ scene: UIScene) {}
+    func sceneDidDisconnect(_ scene: UIScene) {
+        CoreDataManager.shared.saveContext()
+    }
     
     func sceneDidBecomeActive(_ scene: UIScene) {}
     
@@ -33,6 +36,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     
     func sceneWillEnterForeground(_ scene: UIScene) {}
     
-    func sceneDidEnterBackground(_ scene: UIScene) {}
+    func sceneDidEnterBackground(_ scene: UIScene) {
+        CoreDataManager.shared.saveContext()
+    }
 }
 

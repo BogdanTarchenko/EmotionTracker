@@ -7,11 +7,13 @@
 
 import UIKit
 import SnapKit
+import Combine
 
 class SettingsViewController: UIViewController {
     weak var coordinator: SettingsCoordinator?
     
-    private var viewModel = SettingsViewModel()
+    private let viewModel: SettingsViewModel
+    private var cancellables = Set<AnyCancellable>()
     
     private var settingsTitleLabel = UILabel()
     private var profileImageView = UIImageView()
@@ -30,11 +32,21 @@ class SettingsViewController: UIViewController {
     private var addAlertButton = AddAlertButton()
     private var touchIDSettingsSwitcherView = SettingsSwitcherView(image: Constants.faceIDImage, title: Constants.faceIDTitle)
     
+    init(viewModel: SettingsViewModel = SettingsViewModel()) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
         setupConstraints()
         setupButtonActions()
+        bindViewModel()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -63,6 +75,7 @@ private extension SettingsViewController {
         configureProfileImageView()
         configureProfileFullNameLabel()
         setupCollectionView()
+        setupSwitchers()
     }
     
     func setupCollectionView() {
@@ -141,19 +154,90 @@ private extension SettingsViewController {
             make.top.equalTo(addAlertButton.snp.bottom).offset(Metrics.touchIDSettingsSwitcherViewTopOffset)
         }
     }
+    
+    func setupSwitchers() {
+        alertSettingsSwitcherView.onSwitchChanged = { [weak self] isOn in
+            self?.viewModel.toggleNotifications(isOn)
+        }
+    }
+    
+    func bindViewModel() {
+        viewModel.$isNotificationsEnabled
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] isEnabled in
+                self?.alertSettingsSwitcherView.setSwitchState(isEnabled)
+            }
+            .store(in: &cancellables)
+        
+        viewModel.$showPermissionAlert
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] showAlert in
+                if showAlert {
+                    self?.showNotificationPermissionAlert()
+                }
+            }
+            .store(in: &cancellables)
+        
+        viewModel.$alertTimes
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] _ in
+                self?.reloadCollectionView()
+            }
+            .store(in: &cancellables)
+    }
+    
+    private func showNotificationPermissionAlert() {
+        let alert = UIAlertController(
+            title: "Уведомления отключены",
+            message: "Для работы напоминаний необходимо разрешить отправку уведомлений. Вы можете включить их в настройках приложения.",
+            preferredStyle: .alert
+        )
+        
+        alert.addAction(UIAlertAction(title: "Открыть настройки", style: .default) { _ in
+            if let settingsUrl = URL(string: UIApplication.openSettingsURLString) {
+                UIApplication.shared.open(settingsUrl)
+            }
+        })
+        
+        alert.addAction(UIAlertAction(title: "Отмена", style: .cancel))
+        
+        present(alert, animated: true)
+    }
 }
 
 // MARK: - Button Actions
 
 private extension SettingsViewController {
     func setupButtonActions() {
-        addAlertButton.onButtonTapped = {
-            TimePickerManager.showTimePicker(on: self) { selectedTime in
+        addAlertButton.onButtonTapped = { [weak self] in
+            guard let self = self else { return }
+            
+            if !self.viewModel.isNotificationsEnabled {
+                self.showNotificationsAlert()
+                return
+            }
+            
+            TimePickerManager.showTimePicker(on: self) { [weak self] selectedTime in
                 let timeString = selectedTime.toString(format: "HH:mm")
-                self.viewModel.addAlertTime(timeString)
-                self.reloadCollectionView()
+                self?.viewModel.addAlertTime(timeString)
             }
         }
+    }
+    
+    private func showNotificationsAlert() {
+        let alert = UIAlertController(
+            title: "Уведомления отключены",
+            message: "Для добавления напоминаний необходимо включить уведомления",
+            preferredStyle: .alert
+        )
+        
+        alert.addAction(UIAlertAction(title: "Включить", style: .default) { [weak self] _ in
+            self?.viewModel.toggleNotifications(true)
+        })
+        
+        alert.addAction(UIAlertAction(title: "Отмена", style: .cancel))
+        
+        present(alert, animated: true)
     }
 }
 
@@ -215,7 +299,6 @@ extension SettingsViewController: UICollectionViewDataSource, UICollectionViewDe
         
         cell.onButtonTapped = { [weak self] in
             self?.viewModel.removeAlertTime(at: indexPath.row)
-            self?.reloadCollectionView()
         }
         
         return cell
