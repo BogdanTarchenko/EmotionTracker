@@ -9,7 +9,6 @@ import UIKit
 
 final class StatisticsCoordinator: Coordinator {
     var navigationController: UINavigationController
-    var parentCoordinator: Coordinator?
     var childCoordinators: [Coordinator] = []
     
     init(navigationController: UINavigationController) {

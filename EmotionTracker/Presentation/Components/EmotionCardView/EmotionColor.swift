@@ -7,7 +7,7 @@
 
 import UIKit
 
-enum EmotionColor {
+enum EmotionColor: String {
     case green
     case red
     case yellow

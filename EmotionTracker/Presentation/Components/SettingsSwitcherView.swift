@@ -9,10 +9,15 @@ import UIKit
 import SnapKit
 
 class SettingsSwitcherView: UIView {
+    // MARK: - Properties
     
     private var iconImageView = UIImageView()
     private var titleLabel = UILabel()
     private var switcher = UISwitch()
+    
+    var onSwitchChanged: ((Bool) -> Void)?
+    
+    // MARK: - Initialization
     
     init(image: UIImage, title: String) {
         super.init(frame: .zero)
@@ -23,7 +28,19 @@ class SettingsSwitcherView: UIView {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
+    // MARK: - Public Methods
+    
+    func setSwitchState(_ isOn: Bool) {
+        switcher.setOn(isOn, animated: true)
+    }
+    
+    func getSwitchState() -> Bool {
+        return switcher.isOn
+    }
 }
+
+// MARK: - Private Setup
 
 private extension SettingsSwitcherView {
     func setupUI(image: UIImage, title: String) {
@@ -46,6 +63,12 @@ private extension SettingsSwitcherView {
     
     func configureSwitcher() {
         switcher.isOn = false
+        switcher.onTintColor = Constants.switcherOnTintColor
+        switcher.addTarget(self, action: #selector(switchValueChanged), for: .valueChanged)
+    }
+    
+    @objc private func switchValueChanged(_ sender: UISwitch) {
+        onSwitchChanged?(sender.isOn)
     }
     
     func setupConstraints() {
@@ -87,5 +110,6 @@ private extension SettingsSwitcherView {
         static let iconImageColor: UIColor = .iconPrimary
         static let titleLabelTextColor: UIColor = .textPrimary
         static let titleLabelFont: UIFont = UIFont(name: "VelaSans-Medium", size: 16)!
+        static let switcherOnTintColor: UIColor = .greenPrimary
     }
 }
