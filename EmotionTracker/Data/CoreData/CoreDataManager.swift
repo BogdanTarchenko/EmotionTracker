@@ -10,7 +10,7 @@ final class CoreDataManager {
         let container = NSPersistentContainer(name: "EmotionTracker")
         container.loadPersistentStores { description, error in
             if let error = error {
-                fatalError("\(error)")
+                fatalError("Unable to load persistent stores: \(error)")
             }
         }
         return container
@@ -26,7 +26,7 @@ final class CoreDataManager {
                 try context.save()
             } catch {
                 let error = error as NSError
-                fatalError("\(error), \(error.userInfo)")
+                fatalError("Unresolved error \(error), \(error.userInfo)")
             }
         }
     }
