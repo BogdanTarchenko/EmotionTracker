@@ -159,6 +159,10 @@ private extension SettingsViewController {
         alertSettingsSwitcherView.onSwitchChanged = { [weak self] isOn in
             self?.viewModel.toggleNotifications(isOn)
         }
+        
+        touchIDSettingsSwitcherView.onSwitchChanged = { [weak self] isOn in
+            self?.viewModel.toggleBiometric(isOn)
+        }
     }
     
     func bindViewModel() {
@@ -182,6 +186,13 @@ private extension SettingsViewController {
             .receive(on: DispatchQueue.main)
             .sink { [weak self] _ in
                 self?.reloadCollectionView()
+            }
+            .store(in: &cancellables)
+        
+        viewModel.$isBiometricEnabled
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] isEnabled in
+                self?.touchIDSettingsSwitcherView.setSwitchState(isEnabled)
             }
             .store(in: &cancellables)
     }

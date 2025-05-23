@@ -7,6 +7,7 @@ protocol CoreDataServiceProtocol {
     var currentStreak: Int { get set }
     var isNotificationsEnabled: Bool { get set }
     var alertTimes: [String] { get set }
+    var isBiometricEnabled: Bool { get set }
     
     func saveEmotionRecord(emotion: String, note: String?, tags: [String]?, color: String?)
     func fetchEmotionRecords() -> [EmotionRecord]
@@ -76,6 +77,14 @@ final class CoreDataService: CoreDataServiceProtocol {
         get { userSettings.alertTimes ?? [] }
         set {
             userSettings.alertTimes = newValue
+            coreDataManager.saveContext()
+        }
+    }
+    
+    var isBiometricEnabled: Bool {
+        get { userSettings.isBiometricEnabled }
+        set {
+            userSettings.isBiometricEnabled = newValue
             coreDataManager.saveContext()
         }
     }

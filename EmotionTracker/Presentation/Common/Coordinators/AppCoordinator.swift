@@ -12,12 +12,32 @@ final class AppCoordinator: Coordinator {
     var parentCoordinator: Coordinator?
     var childCoordinators: [Coordinator] = []
     
-    init(navigationController: UINavigationController) {
+    private let coreDataService: CoreDataServiceProtocol
+    private let biometricService: BiometricServiceProtocol
+    
+    init(navigationController: UINavigationController,
+         coreDataService: CoreDataServiceProtocol = CoreDataService(),
+         biometricService: BiometricServiceProtocol = BiometricService()) {
         self.navigationController = navigationController
+        self.coreDataService = coreDataService
+        self.biometricService = biometricService
     }
     
     func start() {
-        showWelcome()
+        if coreDataService.isBiometricEnabled {
+            showBiometricAuth()
+        } else {
+            showWelcome()
+        }
+    }
+    
+    private func showBiometricAuth() {
+        let authVC = BiometricAuthViewController(biometricService: biometricService) { [weak self] in
+            self?.showTabBar()
+        }
+        
+        navigationController.setNavigationBarHidden(true, animated: false)
+        navigationController.setViewControllers([authVC], animated: false)
     }
     
     private func showWelcome() {
@@ -32,5 +52,11 @@ final class AppCoordinator: Coordinator {
         tabBarCoordinator.parentCoordinator = self
         childCoordinators.append(tabBarCoordinator)
         tabBarCoordinator.start()
+    }
+    
+    func handleAppDidBecomeActive() {
+        if coreDataService.isBiometricEnabled {
+            showBiometricAuth()
+        }
     }
 }

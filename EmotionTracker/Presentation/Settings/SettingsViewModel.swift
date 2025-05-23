@@ -8,28 +8,36 @@
 import Foundation
 import Combine
 import UserNotifications
+import LocalAuthentication
 
 final class SettingsViewModel {
     private let notificationService: NotificationServiceProtocol
     private var coreDataService: CoreDataServiceProtocol
+    private let biometricService: BiometricServiceProtocol
     
     @Published var isNotificationsEnabled: Bool = false
+    @Published var isBiometricEnabled: Bool = false
     @Published var alertTimes: [String] = []
     @Published var showPermissionAlert: Bool = false
+    @Published var biometricType: BiometricType = .none
     
     private var cancellables = Set<AnyCancellable>()
     
     init(notificationService: NotificationServiceProtocol = NotificationService.shared,
-         coreDataService: CoreDataServiceProtocol = CoreDataService()) {
+         coreDataService: CoreDataServiceProtocol = CoreDataService(),
+         biometricService: BiometricServiceProtocol = BiometricService()) {
         self.notificationService = notificationService
         self.coreDataService = coreDataService
+        self.biometricService = biometricService
         
         loadSettings()
     }
     
     private func loadSettings() {
         isNotificationsEnabled = coreDataService.isNotificationsEnabled
+        isBiometricEnabled = coreDataService.isBiometricEnabled
         alertTimes = coreDataService.alertTimes
+        biometricType = biometricService.biometricType
         
         notificationService.isNotificationsEnabled { [weak self] isEnabled in
             guard let self = self else { return }
@@ -115,5 +123,30 @@ final class SettingsViewModel {
         let formatter = DateFormatter()
         formatter.dateFormat = "HH:mm"
         return formatter.date(from: timeString)
+    }
+    
+    func toggleBiometric(_ isEnabled: Bool) {
+        if isEnabled {
+            if biometricType == .none {
+                return
+            }
+            
+            biometricService.authenticate { [weak self] success, error in
+                guard let self = self else { return }
+                
+                DispatchQueue.main.async {
+                    if success {
+                        self.isBiometricEnabled = true
+                        self.coreDataService.isBiometricEnabled = true
+                    } else if let error = error {
+                        self.isBiometricEnabled = false
+                        self.coreDataService.isBiometricEnabled = false
+                    }
+                }
+            }
+        } else {
+            isBiometricEnabled = false
+            coreDataService.isBiometricEnabled = false
+        }
     }
 }
