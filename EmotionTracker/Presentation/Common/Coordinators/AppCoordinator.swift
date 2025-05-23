@@ -9,7 +9,6 @@ import UIKit
 
 final class AppCoordinator: Coordinator {
     var navigationController: UINavigationController
-    var parentCoordinator: Coordinator?
     var childCoordinators: [Coordinator] = []
     
     private let coreDataService: CoreDataServiceProtocol
@@ -42,14 +41,12 @@ final class AppCoordinator: Coordinator {
     
     private func showWelcome() {
         let welcomeCoordinator = WelcomeCoordinator(navigationController: navigationController)
-        welcomeCoordinator.parentCoordinator = self
         childCoordinators.append(welcomeCoordinator)
         welcomeCoordinator.start()
     }
     
     private func showTabBar() {
         let tabBarCoordinator = TabBarCoordinator(navigationController: navigationController)
-        tabBarCoordinator.parentCoordinator = self
         childCoordinators.append(tabBarCoordinator)
         tabBarCoordinator.start()
     }

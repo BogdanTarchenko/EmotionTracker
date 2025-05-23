@@ -10,7 +10,6 @@ import AuthenticationServices
 
 final class WelcomeCoordinator: Coordinator {
     var navigationController: UINavigationController
-    var parentCoordinator: Coordinator?
     var childCoordinators: [Coordinator] = []
     
     init(navigationController: UINavigationController) {
@@ -55,8 +54,7 @@ final class WelcomeCoordinator: Coordinator {
     
     private func showTabBar() {
         let tabBarCoordinator = TabBarCoordinator(navigationController: navigationController)
-        tabBarCoordinator.parentCoordinator = parentCoordinator
-        parentCoordinator?.childCoordinators.append(tabBarCoordinator)
+        childCoordinators.append(tabBarCoordinator)
         finish()
         tabBarCoordinator.start()
     }
